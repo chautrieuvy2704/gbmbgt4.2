@@ -1,0 +1,3601 @@
+<!DOCTYPE html>
+<html lang="vi"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>汉字空战 — 星际陨石战 (Chinese Character Cosmic Battle)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&amp;family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      background: radial-gradient(ellipse at top, #0f172a 0%, #050816 65%, #02040a 100%);
+      color: #f8fafc;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .hanzi-font {
+      font-family: 'Noto Sans SC', sans-serif;
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    .neon-cyan {
+      box-shadow: 0 0 18px rgba(34, 211, 238, 0.45);
+    }
+    .ship-card {
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .ship-card.active {
+      border-color: #22d3ee;
+      background: rgba(34, 211, 238, 0.16);
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.35);
+      transform: translateY(-2px);
+    }
+    /* Custom thin scrollbar only inside modals */
+    .modal-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .modal-scroll::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    .modal-scroll::-webkit-scrollbar-thumb {
+      background: rgba(56, 189, 248, 0.35);
+      border-radius: 999px;
+    }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+    .animate-float {
+      animation: floatSlow 3s ease-in-out infinite;
+    }
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.bottom-2{bottom:0.5rem}.left-2{left:0.5rem}.right-2{right:0.5rem}.top-0{top:0px}.top-2{top:0.5rem}.z-20{z-index:20}.z-30{z-index:30}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-0\.5{margin-bottom:0.125rem}.mb-1{margin-bottom:0.25rem}.mb-1\.5{margin-bottom:0.375rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mr-1{margin-right:0.25rem}.mr-1\.5{margin-right:0.375rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-3{margin-top:0.75rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-1\.5{height:0.375rem}.h-10{height:2.5rem}.h-11{height:2.75rem}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-44{height:11rem}.h-5{height:1.25rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-\[100dvh\]{height:100dvh}.h-\[92dvh\]{height:92dvh}.h-full{height:100%}.max-h-28{max-height:7rem}.max-h-60{max-height:15rem}.max-h-64{max-height:16rem}.max-h-80{max-height:20rem}.max-h-\[92dvh\]{max-height:92dvh}.max-h-full{max-height:100%}.w-12{width:3rem}.w-14{width:3.5rem}.w-16{width:4rem}.w-20{width:5rem}.w-44{width:11rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-full{width:100%}.w-px{width:1px}.w-screen{width:100vw}.min-w-0{min-width:0px}.min-w-\[200px\]{min-width:200px}.min-w-\[220px\]{min-width:220px}.max-w-2xl{max-width:42rem}.max-w-4xl{max-width:56rem}.max-w-5xl{max-width:64rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.border-collapse{border-collapse:collapse}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-x-1 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.25rem * var(--tw-space-x-reverse));margin-left:calc(0.25rem * calc(1 - var(--tw-space-x-reverse)))}.divide-y > :not([hidden]) ~ :not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px * calc(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px * var(--tw-divide-y-reverse))}.divide-slate-800\/70 > :not([hidden]) ~ :not([hidden]){border-color:rgb(30 41 59 / 0.7)}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-amber-400{--tw-border-opacity:1;border-color:rgb(251 191 36 / var(--tw-border-opacity, 1))}.border-amber-400\/40{border-color:rgb(251 191 36 / 0.4)}.border-amber-400\/50{border-color:rgb(251 191 36 / 0.5)}.border-amber-400\/70{border-color:rgb(251 191 36 / 0.7)}.border-cyan-400{--tw-border-opacity:1;border-color:rgb(34 211 238 / var(--tw-border-opacity, 1))}.border-cyan-400\/30{border-color:rgb(34 211 238 / 0.3)}.border-cyan-400\/40{border-color:rgb(34 211 238 / 0.4)}.border-cyan-400\/50{border-color:rgb(34 211 238 / 0.5)}.border-cyan-500\/20{border-color:rgb(6 182 212 / 0.2)}.border-cyan-500\/30{border-color:rgb(6 182 212 / 0.3)}.border-cyan-500\/40{border-color:rgb(6 182 212 / 0.4)}.border-emerald-400\/40{border-color:rgb(52 211 153 / 0.4)}.border-rose-400\/40{border-color:rgb(251 113 133 / 0.4)}.border-rose-500\/30{border-color:rgb(244 63 94 / 0.3)}.border-slate-600{--tw-border-opacity:1;border-color:rgb(71 85 105 / var(--tw-border-opacity, 1))}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.border-slate-700\/80{border-color:rgb(51 65 85 / 0.8)}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-slate-800\/90{border-color:rgb(30 41 59 / 0.9)}.border-transparent{border-color:transparent}.bg-amber-400{--tw-bg-opacity:1;background-color:rgb(251 191 36 / var(--tw-bg-opacity, 1))}.bg-amber-500\/15{background-color:rgb(245 158 11 / 0.15)}.bg-amber-500\/20{background-color:rgb(245 158 11 / 0.2)}.bg-amber-500\/25{background-color:rgb(245 158 11 / 0.25)}.bg-cyan-400{--tw-bg-opacity:1;background-color:rgb(34 211 238 / var(--tw-bg-opacity, 1))}.bg-cyan-500\/15{background-color:rgb(6 182 212 / 0.15)}.bg-cyan-500\/20{background-color:rgb(6 182 212 / 0.2)}.bg-cyan-950\/30{background-color:rgb(8 51 68 / 0.3)}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-500\/15{background-color:rgb(16 185 129 / 0.15)}.bg-emerald-500\/20{background-color:rgb(16 185 129 / 0.2)}.bg-rose-500{--tw-bg-opacity:1;background-color:rgb(244 63 94 / var(--tw-bg-opacity, 1))}.bg-rose-500\/15{background-color:rgb(244 63 94 / 0.15)}.bg-rose-950\/30{background-color:rgb(76 5 25 / 0.3)}.bg-slate-700{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-800\/90{background-color:rgb(30 41 59 / 0.9)}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/75{background-color:rgb(15 23 42 / 0.75)}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-slate-900\/90{background-color:rgb(15 23 42 / 0.9)}.bg-slate-950{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-slate-950\/50{background-color:rgb(2 6 23 / 0.5)}.bg-slate-950\/60{background-color:rgb(2 6 23 / 0.6)}.bg-slate-950\/65{background-color:rgb(2 6 23 / 0.65)}.bg-slate-950\/70{background-color:rgb(2 6 23 / 0.7)}.bg-slate-950\/75{background-color:rgb(2 6 23 / 0.75)}.bg-slate-950\/80{background-color:rgb(2 6 23 / 0.8)}.bg-slate-950\/85{background-color:rgb(2 6 23 / 0.85)}.bg-slate-950\/90{background-color:rgb(2 6 23 / 0.9)}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-amber-400{--tw-gradient-from:#fbbf24 var(--tw-gradient-from-position);--tw-gradient-to:rgb(251 191 36 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyan-300{--tw-gradient-from:#67e8f9 var(--tw-gradient-from-position);--tw-gradient-to:rgb(103 232 249 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-cyan-400{--tw-gradient-from:#22d3ee var(--tw-gradient-from-position);--tw-gradient-to:rgb(34 211 238 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-sky-500{--tw-gradient-to:rgb(14 165 233 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #0ea5e9 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-white{--tw-gradient-to:rgb(255 255 255 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #fff var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-amber-300{--tw-gradient-to:#fcd34d var(--tw-gradient-to-position)}.to-blue-500{--tw-gradient-to:#3b82f6 var(--tw-gradient-to-position)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.to-orange-500{--tw-gradient-to:#f97316 var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.p-1\.5{padding:0.375rem}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[9px\]{font-size:9px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-semibold{font-weight:600}.font-normal{font-weight:400}.uppercase{text-transform:uppercase}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-\[0\.4em\]{letter-spacing:0.4em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.text-amber-200{--tw-text-opacity:1;color:rgb(253 230 138 / var(--tw-text-opacity, 1))}.text-amber-300{--tw-text-opacity:1;color:rgb(252 211 77 / var(--tw-text-opacity, 1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-cyan-200{--tw-text-opacity:1;color:rgb(165 243 252 / var(--tw-text-opacity, 1))}.text-cyan-300{--tw-text-opacity:1;color:rgb(103 232 249 / var(--tw-text-opacity, 1))}.text-cyan-400{--tw-text-opacity:1;color:rgb(34 211 238 / var(--tw-text-opacity, 1))}.text-emerald-300{--tw-text-opacity:1;color:rgb(110 231 183 / var(--tw-text-opacity, 1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-rose-300{--tw-text-opacity:1;color:rgb(253 164 175 / var(--tw-text-opacity, 1))}.text-rose-400{--tw-text-opacity:1;color:rgb(251 113 133 / var(--tw-text-opacity, 1))}.text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-950{--tw-text-opacity:1;color:rgb(2 6 23 / var(--tw-text-opacity, 1))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.placeholder-slate-400::placeholder{--tw-placeholder-opacity:1;color:rgb(148 163 184 / var(--tw-placeholder-opacity, 1))}.placeholder-slate-500::placeholder{--tw-placeholder-opacity:1;color:rgb(100 116 139 / var(--tw-placeholder-opacity, 1))}.accent-amber-400{accent-color:#fbbf24}.accent-rose-500{accent-color:#f43f5e}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-amber-500\/15{--tw-shadow-color:rgb(245 158 11 / 0.15);--tw-shadow:var(--tw-shadow-colored)}.shadow-cyan-500\/25{--tw-shadow-color:rgb(6 182 212 / 0.25);--tw-shadow:var(--tw-shadow-colored)}.shadow-cyan-500\/30{--tw-shadow-color:rgb(6 182 212 / 0.3);--tw-shadow:var(--tw-shadow-colored)}.shadow-cyan-950\/80{--tw-shadow-color:rgb(8 51 68 / 0.8);--tw-shadow:var(--tw-shadow-colored)}.drop-shadow{--tw-drop-shadow:drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:bg-amber-500\/25:hover{background-color:rgb(245 158 11 / 0.25)}.hover\:bg-amber-500\/35:hover{background-color:rgb(245 158 11 / 0.35)}.hover\:bg-cyan-300:hover{--tw-bg-opacity:1;background-color:rgb(103 232 249 / var(--tw-bg-opacity, 1))}.hover\:bg-cyan-500\/30:hover{background-color:rgb(6 182 212 / 0.3)}.hover\:bg-emerald-400:hover{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500\/25:hover{background-color:rgb(16 185 129 / 0.25)}.hover\:bg-emerald-500\/30:hover{background-color:rgb(16 185 129 / 0.3)}.hover\:bg-rose-400:hover{--tw-bg-opacity:1;background-color:rgb(251 113 133 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-500\/20:hover{background-color:rgb(244 63 94 / 0.2)}.hover\:bg-rose-500\/25:hover{background-color:rgb(244 63 94 / 0.25)}.hover\:bg-slate-700:hover{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.hover\:bg-cyan-500\/20:hover{background-color:rgb(6 182 212 / 0.2)}.hover\:bg-slate-800\/40:hover{background-color:rgb(30 41 59 / 0.4)}.hover\:bg-rose-500\/30:hover{background-color:rgb(244 63 94 / 0.3)}.hover\:from-cyan-300:hover{--tw-gradient-from:#67e8f9 var(--tw-gradient-from-position);--tw-gradient-to:rgb(103 232 249 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:to-blue-500:hover{--tw-gradient-to:#3b82f6 var(--tw-gradient-to-position)}.hover\:text-emerald-200:hover{--tw-text-opacity:1;color:rgb(167 243 208 / var(--tw-text-opacity, 1))}.hover\:text-rose-300:hover{--tw-text-opacity:1;color:rgb(253 164 175 / var(--tw-text-opacity, 1))}.hover\:text-slate-200:hover{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.focus\:border-amber-400:focus{--tw-border-opacity:1;border-color:rgb(251 191 36 / var(--tw-border-opacity, 1))}.focus\:border-cyan-400:focus{--tw-border-opacity:1;border-color:rgb(34 211 238 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.active\:scale-\[0\.99\]:active{--tw-scale-x:0.99;--tw-scale-y:0.99;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 640px){.sm\:bottom-4{bottom:1rem}.sm\:left-4{left:1rem}.sm\:right-4{right:1rem}.sm\:top-3{top:0.75rem}.sm\:block{display:block}.sm\:h-11{height:2.75rem}.sm\:h-12{height:3rem}.sm\:h-14{height:3.5rem}.sm\:h-9{height:2.25rem}.sm\:w-28{width:7rem}.sm\:w-9{width:2.25rem}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:gap-2{gap:0.5rem}.sm\:gap-2\.5{gap:0.625rem}.sm\:gap-3{gap:0.75rem}.sm\:gap-4{gap:1rem}.sm\:gap-5{gap:1.25rem}.sm\:p-2{padding:0.5rem}.sm\:p-4{padding:1rem}.sm\:p-6{padding:1.5rem}.sm\:p-7{padding:1.75rem}.sm\:p-8{padding:2rem}.sm\:px-3{padding-left:0.75rem;padding-right:0.75rem}.sm\:px-4{padding-left:1rem;padding-right:1rem}.sm\:px-5{padding-left:1.25rem;padding-right:1.25rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.sm\:py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.sm\:py-4{padding-top:1rem;padding-bottom:1rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}.sm\:text-xs{font-size:0.75rem;line-height:1rem}}@media (min-width: 768px){.md\:inline{display:inline}}@media (min-width: 1024px){.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}</style><script src="chrome-extension://liecbddmkiiihnedobmlmillhodjkdmb/js/recordConsoleEvents.js"></script></head>
+<body class="flex flex-col w-screen h-[100dvh] overflow-hidden relative">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="w-full h-12 sm:h-14 px-3 sm:px-5 flex items-center justify-between border-b border-cyan-500/20 bg-slate-950/80 backdrop-blur-md z-30 shrink-0">
+    <div id="brandSecretTrigger" class="flex items-center gap-2.5 cursor-pointer" title="汉字空战 — 星际陨石战">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+        <i class="fa-solid fa-rocket text-slate-950 text-sm sm:text-base"></i>
+      </div>
+      <div class="leading-tight">
+        <div class="flex items-center gap-1.5">
+          <span class="hanzi-font font-black text-sm sm:text-base tracking-wide text-cyan-300">汉字空战</span>
+          <span class="hidden md:inline text-xs font-bold text-slate-400">• 星际陨石战</span>
+        </div>
+        <div class="text-[10px] text-slate-400 hidden sm:block">Chinh phục chữ Hán qua trận chiến vũ trụ</div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <!-- Audio Toggles -->
+      <button id="btnToggleSfx" onclick="toggleSfx()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-cyan-300 flex items-center justify-center text-xs sm:text-sm transition" title="Bật/Tắt hiệu ứng âm thanh"><i class="fa-solid fa-volume-high"></i></button>
+      <button id="btnToggleBgm" onclick="toggleBgm()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-amber-300 flex items-center justify-center text-xs sm:text-sm transition bg-amber-500/25 border-amber-400" title="Bật/Tắt nhạc nền vũ trụ"><i class="fa-solid fa-music"></i></button>
+
+      <!-- Share QR / Link -->
+      <button onclick="openShareStudentLinkModal()" class="px-2.5 sm:px-3 h-8 sm:h-9 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/40 text-emerald-300 text-xs font-bold flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-qrcode"></i>
+        <span>Mã QR / Link</span>
+      </button>
+
+      <!-- Teacher Access Button -->
+      <button id="btnOpenTeacher" onclick="handleTeacherAccessClick()" class="px-2.5 sm:px-3 h-8 sm:h-9 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        <span>Giáo Viên</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWPORT AREA -->
+  <main class="relative flex-1 w-full h-full overflow-hidden flex items-center justify-center">
+    <!-- Cosmic Background & Game Canvas -->
+    <canvas id="gameCanvas" class="w-full h-full block" width="2940" height="1490"></canvas>
+
+    <!-- IN-GAME TOP HUD OVERLAY -->
+    <div id="gameHud" class="absolute top-2 left-2 right-2 sm:top-3 sm:left-4 sm:right-4 z-20 pointer-events-none hidden">
+      <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2 bg-slate-950/80 backdrop-blur-md border border-cyan-500/30 rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 shadow-xl pointer-events-auto">
+        <!-- Lives & Round -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div class="flex items-center gap-1" id="hudLives" title="Mạng sống"><i class="fa-solid fa-heart text-rose-500 text-sm sm:text-base drop-shadow"></i><i class="fa-solid fa-heart text-rose-500 text-sm sm:text-base drop-shadow"></i><i class="fa-solid fa-heart text-rose-500 text-sm sm:text-base drop-shadow"></i><i class="fa-solid fa-heart text-rose-500 text-sm sm:text-base drop-shadow"></i><i class="fa-solid fa-heart text-rose-500 text-sm sm:text-base drop-shadow"></i></div>
+          <div class="h-5 w-px bg-slate-700"></div>
+          <div>
+            <div class="text-[10px] sm:text-xs font-extrabold text-cyan-300 tracking-wider">
+              VÒNG: <span id="hudRound">3</span> / 3
+            </div>
+            <div class="w-20 sm:w-28 h-1.5 bg-slate-800 rounded-full overflow-hidden mt-1">
+              <div id="hudRoundBar" class="h-full bg-gradient-to-r from-cyan-400 to-blue-500 transition-all duration-300" style="width: 45%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center Timer & Word Counter -->
+        <div class="flex items-center gap-3 sm:gap-5">
+          <div class="flex items-center gap-1.5 bg-slate-900/90 border border-slate-700/80 px-2.5 py-1 rounded-xl">
+            <i class="fa-regular fa-clock text-cyan-400 text-xs sm:text-sm"></i>
+            <span id="hudTimer" class="font-mono font-extrabold text-sm sm:text-base text-rose-400 animate-pulse">10s</span>
+          </div>
+          <div class="text-xs sm:text-sm font-bold text-slate-300">
+            Từ: <span id="hudWordsCleared" class="text-emerald-400 font-extrabold">32</span>/<span id="hudWordsTotal">31</span>
+          </div>
+        </div>
+
+        <!-- Score & Pause -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div class="text-right">
+            <div class="text-[9px] uppercase tracking-wider text-slate-400 font-bold">Điểm số</div>
+            <div id="hudScore" class="font-mono font-black text-base sm:text-xl text-amber-400 leading-none">5,700</div>
+          </div>
+          <button onclick="togglePauseGame()" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 flex items-center justify-center transition" title="Tạm dừng">
+            <i id="pauseIcon" class="fa-solid fa-pause text-xs sm:text-sm"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- IN-GAME BOTTOM PINYIN INPUT BAR -->
+    <div id="gameInputBar" class="absolute bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4 z-20 hidden">
+      <div class="max-w-2xl mx-auto flex items-center gap-2 bg-slate-950/90 backdrop-blur-md border-2 border-cyan-400/50 rounded-2xl p-1.5 sm:p-2 shadow-2xl shadow-cyan-950/80">
+        <button type="button" onpointerdown="event.preventDefault(); fireAtRewardMeteor();" id="btnShootMeteor" class="px-3 sm:px-4 h-11 sm:h-12 rounded-xl bg-amber-500/25 hover:bg-amber-500/35 active:scale-95 border-2 border-amber-400/70 text-amber-200 text-xs sm:text-sm font-black flex items-center gap-1.5 shrink-0 transition shadow-lg shadow-amber-500/15" title="Nhấn phím 1 hoặc chạm nút này để bắn thiên thạch phần thưởng">
+          <i class="fa-solid fa-meteor text-amber-300"></i>
+          <span>「1」</span>
+          <span class="hidden md:inline text-xs font-bold">Thiên Thạch</span>
+        </button>
+
+        <input id="pinyinInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Gõ Pinyin để bắn tự động (vd: nihao)..." class="flex-1 min-w-0 h-10 sm:h-11 bg-slate-900/90 text-white placeholder-slate-400 px-3 sm:px-4 rounded-xl border border-slate-700 focus:border-cyan-400 focus:outline-none text-sm sm:text-base font-bold tracking-wide">
+
+        <button type="button" onpointerdown="event.preventDefault(); submitPinyinShot();" class="px-4 sm:px-5 h-11 sm:h-12 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-cyan-500/30 shrink-0 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-crosshairs"></i>
+          <span>BẮN</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ROUND TRANSITION BANNER -->
+    <div id="roundBanner" class="absolute inset-0 z-30 flex items-center justify-center bg-slate-950/65 backdrop-blur-sm p-4 hidden">
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 max-w-md w-full text-center border-2 border-cyan-400/50">
+        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-cyan-500/20 border border-cyan-400 flex items-center justify-center text-cyan-300 text-2xl">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+        <h2 id="bannerTitle" class="text-xl sm:text-2xl font-black text-white mb-1">HOÀN THÀNH VÒNG 2!</h2>
+        <p id="bannerSubtitle" class="text-xs sm:text-sm text-cyan-300 font-semibold mb-4">Thưởng qua vòng: +400 điểm</p>
+        <div class="bg-slate-900/80 rounded-2xl p-3 border border-slate-700/80 text-xs text-slate-300 mb-4" id="bannerNextInfo">Vòng 3 — Đại chiến Boss! Tốc độ tăng 30% &amp; điểm thưởng nhân đôi!</div>
+        <div class="text-xs font-bold text-amber-300 animate-pulse">Tự động tiếp tục sau 2 giây...</div>
+      </div>
+    </div>
+
+    <!-- PAUSE OVERLAY -->
+    <div id="pauseOverlay" class="hidden absolute inset-0 z-30 flex items-center justify-center bg-slate-950/75 backdrop-blur-md p-4">
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-amber-500/20 border border-amber-400/50 flex items-center justify-center text-amber-300 text-xl">
+          <i class="fa-solid fa-pause"></i>
+        </div>
+        <h2 class="text-xl font-black text-white mb-1">TẠM DỪNG TRÒ CHƠI</h2>
+        <p class="text-xs text-slate-400 mb-5">Thời gian và phi thuyền đang được giữ nguyên</p>
+        <div class="flex flex-col gap-2.5">
+          <button onclick="togglePauseGame()" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 font-black text-sm shadow-lg">
+            <i class="fa-solid fa-play mr-1.5"></i> TIẾP TỤC CHƠI
+          </button>
+          <button onclick="quitToLobby()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 font-bold text-xs">
+            <i class="fa-solid fa-house mr-1.5"></i> THOÁT VỀ SẢNH CHỜ
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDENT LOBBY SCREEN (SINGLE VIEWPORT FITTED) -->
+    <div id="lobbyScreen" class="absolute inset-0 z-20 flex items-center justify-center p-2.5 sm:p-4 overflow-hidden">
+      <div class="glass-panel rounded-3xl w-full max-w-xl p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 max-h-full overflow-y-auto modal-scroll">
+        <!-- Title -->
+        <div class="text-center">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-[11px] font-bold mb-1.5">
+            <i class="fa-solid fa-star"></i>
+            <span>HỌC TIẾNG TRUNG QUA GAME BẮN PHI THUYỀN</span>
+          </div>
+          <h1 class="hanzi-font text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-amber-300">
+            汉字空战 • 星际陨石战
+          </h1>
+          <p class="text-xs text-slate-300 mt-0.5">Gõ Pinyin để bắn hạ mục tiêu chữ Hán &amp; thu thập thiên thạch thưởng!</p>
+        </div>
+
+        <!-- Student Name, Lesson & Speed Selector -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1">
+              <i class="fa-solid fa-user-astronaut text-cyan-400 mr-1"></i> Tên / Biệt danh học sinh
+            </label>
+            <input id="studentNameInput" type="text" maxlength="24" placeholder="Ví dụ: Minh Anh - 6A1" class="w-full h-10 px-3 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-cyan-400 focus:outline-none text-sm font-semibold text-white placeholder-slate-500">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1">
+              <i class="fa-solid fa-book-open text-amber-400 mr-1"></i> Chọn Bài Học
+            </label>
+            <select id="studentLessonSelect" class="w-full h-10 px-3 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-cyan-400 focus:outline-none text-sm font-bold text-cyan-200"><option value="bai_mwppt0hl">GT4.2 第六课 (31 từ)</option>
+<option value="bai_mwprevol">GT4.2第七课 (33 từ)</option>
+<option value="bai_mwps9h0z">GT4.2 第八课 (29 từ)</option>
+<option value="bai_mwpsmfkr">GT4.2 第九课 (31 từ)</option>
+<option value="bai_mwpsnqqf">GT4.2  第十课 (30 từ)</option></select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-300 mb-1">
+              <i class="fa-solid fa-gauge-high text-rose-400 mr-1"></i> Chọn Tốc Độ Bay
+            </label>
+            <select id="studentSpeedSelect" class="w-full h-10 px-3 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-cyan-400 focus:outline-none text-sm font-bold text-amber-200">
+              <option value="0.7">0.7x (Siêu chậm)</option>
+              <option value="0.8">0.8x (Rất chậm)</option>
+              <option value="0.85" selected="">0.85x (Chậm vừa)</option>
+              <option value="0.9">0.9x (Chậm nhẹ)</option>
+              <option value="1.0">1.0x (Tiêu chuẩn)</option>
+              <option value="1.15">1.15x (Nhanh)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Ship Selection -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-300 mb-1.5">
+            <i class="fa-solid fa-shuttle-space text-emerald-400 mr-1"></i> Chọn Chiến Cơ Vũ Trụ
+          </label>
+          <div class="grid grid-cols-3 gap-2 sm:gap-2.5">
+            <div onclick="selectShip('falcon')" id="ship-falcon" class="ship-card rounded-2xl p-2.5 bg-slate-900/80 border border-slate-700 text-center">
+              <div class="text-xl sm:text-2xl text-cyan-400 mb-0.5"><i class="fa-solid fa-jet-fighter-up"></i></div>
+              <div class="text-xs font-extrabold text-white">Star Falcon</div>
+              <div class="text-[10px] text-cyan-300">Laser Xanh Băng</div>
+            </div>
+            <div onclick="selectShip('nova')" id="ship-nova" class="ship-card rounded-2xl p-2.5 bg-slate-900/80 border border-slate-700 text-center">
+              <div class="text-xl sm:text-2xl text-amber-400 mb-0.5"><i class="fa-solid fa-rocket"></i></div>
+              <div class="text-xs font-extrabold text-white">Solar Nova</div>
+              <div class="text-[10px] text-amber-300">Tia Plasma Vàng</div>
+            </div>
+            <div onclick="selectShip('phoenix')" id="ship-phoenix" class="ship-card rounded-2xl p-2.5 bg-slate-900/80 border border-slate-700 text-center active">
+              <div class="text-xl sm:text-2xl text-emerald-400 mb-0.5"><i class="fa-solid fa-shuttle-space"></i></div>
+              <div class="text-xs font-extrabold text-white">Nebula Phoenix</div>
+              <div class="text-[10px] text-emerald-300">Xung Ngọc Lục</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Legend for Reward Meteors -->
+        <div class="bg-slate-900/75 border border-slate-800 rounded-2xl px-3 py-2 flex flex-wrap items-center justify-around gap-2 text-[11px]">
+          <span class="flex items-center gap-1 text-amber-300 font-bold"><i class="fa-solid fa-meteor"></i> Vàng: +300 Điểm</span>
+          <span class="flex items-center gap-1 text-cyan-300 font-bold"><i class="fa-solid fa-meteor"></i> Xanh Cyan: +5 Giây</span>
+          <span class="flex items-center gap-1 text-emerald-400 font-bold"><i class="fa-solid fa-meteor"></i> Xanh Lá: +1 Mạng</span>
+        </div>
+
+        <!-- Start Button -->
+        <button onclick="startNewGame()" class="w-full py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-black text-base sm:text-lg tracking-wide shadow-xl shadow-cyan-500/25 transition transform active:scale-[0.99] flex items-center justify-center gap-2">
+          <i class="fa-solid fa-play"></i>
+          <span>出发！ BẮT ĐẦU CHƠI</span>
+        </button>
+
+        <!-- Share & Privacy Footer -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-2 pt-1 border-t border-slate-800/90 text-[11px] text-slate-400">
+          <button onclick="openShareStudentLinkModal()" class="text-emerald-300 hover:text-emerald-200 font-bold flex items-center gap-1.5">
+            <i class="fa-solid fa-share-nodes"></i>
+            <span>Chia sẻ Mã QR / Link mời học sinh</span>
+          </button>
+          <span class="flex items-center gap-1 text-slate-400">
+            <i class="fa-solid fa-shield-halved text-cyan-400"></i>
+            <span>Không cần đăng nhập • Bảo mật học sinh</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME OVER / VICTORY RESULT SCREEN -->
+    <div id="resultScreen" class="absolute inset-0 z-30 flex items-center justify-center p-3 bg-slate-950/80 backdrop-blur-md hidden">
+      <div class="glass-panel rounded-3xl max-w-md w-full p-5 sm:p-7 text-center border-2 border-cyan-400/40">
+        <div id="resultBadgeIcon" class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300 text-3xl animate-float"><i class="fa-solid fa-crown"></i></div>
+        <h2 id="resultTitle" class="text-2xl font-black text-white">HOÀN THÀNH XUẤT SẮC!</h2>
+        <p id="resultStudentMeta" class="text-xs text-cyan-300 font-bold mt-1 mb-4">Phi công: A • GT4.2 第六课</p>
+
+        <div class="grid grid-cols-3 gap-2.5 mb-5">
+          <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-3">
+            <div class="text-[10px] uppercase font-bold text-slate-400">Tổng Điểm</div>
+            <div id="resScore" class="font-mono text-xl font-black text-amber-400 mt-0.5">5,700</div>
+          </div>
+          <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-3">
+            <div class="text-[10px] uppercase font-bold text-slate-400">Từ Đã Bắn</div>
+            <div id="resWords" class="font-mono text-xl font-black text-emerald-400 mt-0.5">32/31</div>
+          </div>
+          <div class="bg-slate-900/90 border border-slate-700 rounded-2xl p-3">
+            <div class="text-[10px] uppercase font-bold text-slate-400">Chính Xác</div>
+            <div id="resAccuracy" class="font-mono text-xl font-black text-cyan-300 mt-0.5">100%</div>
+          </div>
+        </div>
+
+        <div id="resMissedWordsBox" class="hidden mb-4 text-left bg-rose-950/30 border border-rose-500/30 rounded-2xl p-3 max-h-28 overflow-y-auto modal-scroll">
+          <div class="text-[11px] font-extrabold text-rose-300 mb-1"><i class="fa-solid fa-book-medical mr-1"></i> Từ cần ôn lại:</div>
+          <div id="resMissedWordsList" class="text-xs text-slate-200 flex flex-wrap gap-1.5"></div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-2.5">
+          <button onclick="startNewGame()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 font-black text-sm shadow-lg">
+            <i class="fa-solid fa-rotate-right mr-1.5"></i> CHƠI LẠI
+          </button>
+          <button onclick="quitToLobby()" class="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-bold text-sm">
+            <i class="fa-solid fa-house mr-1.5"></i> ĐỔI BÀI / SẢNH
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==================== MODAL: TEACHER PIN LOGIN ==================== -->
+  <div id="modalTeacherAuth" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 hidden">
+    <div class="glass-panel rounded-3xl max-w-sm w-full p-6 text-center border border-amber-400/40">
+      <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-amber-500/20 border border-amber-400/50 flex items-center justify-center text-amber-300 text-xl">
+        <i class="fa-solid fa-key"></i>
+      </div>
+      <h3 class="text-lg font-black text-white">KHU VỰC GIÁO VIÊN</h3>
+      <p class="text-xs text-slate-300 mt-1 mb-4">Nhập mã bí mật của chủ link để quản lý bài học và từ vựng</p>
+
+      <input id="teacherPinInput" type="password" inputmode="numeric" maxlength="12" placeholder="••••" onkeydown="if(event.key==='Enter') verifyTeacherPin()" class="w-full h-12 text-center tracking-[0.4em] text-xl font-black bg-slate-900 border border-slate-700 focus:border-amber-400 focus:outline-none rounded-xl text-amber-300 mb-2">
+      <p id="teacherPinError" class="hidden text-xs font-bold text-rose-400 mb-3">Mã bí mật chưa chính xác. Vui lòng thử lại!</p>
+
+      <div class="flex gap-2 mt-3">
+        <button onclick="closeTeacherAuthModal()" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs">
+          Hủy
+        </button>
+        <button onclick="verifyTeacherPin()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black text-xs">
+          Mở Khóa
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: TEACHER DASHBOARD ==================== -->
+  <div id="modalTeacherDashboard" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md p-2 sm:p-4">
+    <div class="glass-panel rounded-3xl max-w-4xl w-full h-[92dvh] flex flex-col overflow-hidden border border-amber-400/40">
+      <!-- Dashboard Header -->
+      <div class="px-4 py-3 sm:px-6 sm:py-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2 bg-slate-900/90 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/50 flex items-center justify-center text-amber-300">
+            <i class="fa-solid fa-chalkboard-user"></i>
+          </div>
+          <div>
+            <h2 class="text-sm sm:text-base font-black text-white">BẢNG QUẢN TRỊ GIÁO VIÊN</h2>
+            <p id="teacherSaveStatus" class="text-[11px] text-emerald-400 font-semibold">Đã lưu tự động lúc 09:37:23</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="openShareStudentLinkModal()" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/40 text-emerald-300 text-xs font-bold flex items-center gap-1.5">
+            <i class="fa-solid fa-share-nodes"></i>
+            <span>Chia Sẻ Link / QR</span>
+          </button>
+          <button onclick="lockTeacherSession()" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-rose-500/20 border border-slate-700 text-slate-300 hover:text-rose-300 flex items-center justify-center" title="Khóa quyền giáo viên &amp; đóng">
+            <i class="fa-solid fa-lock text-xs"></i>
+          </button>
+          <button onclick="closeTeacherDashboard()" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 flex items-center justify-center" title="Đóng">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex border-b border-slate-800 bg-slate-950/60 px-4 shrink-0 overflow-x-auto">
+        <button onclick="switchTeacherTab('vocab')" id="tabBtn-vocab" class="px-4 py-2.5 text-xs font-extrabold border-b-2 whitespace-nowrap border-transparent text-slate-400">
+          <i class="fa-solid fa-book mr-1.5"></i>Quản Lý Bài Học &amp; Từ Vựng
+        </button>
+        <button onclick="switchTeacherTab('scores')" id="tabBtn-scores" class="px-4 py-2.5 text-xs font-extrabold border-b-2 hover:text-slate-200 whitespace-nowrap border-transparent text-slate-400">
+          <i class="fa-solid fa-ranking-star mr-1.5"></i>Bảng Điểm Học Sinh
+        </button>
+        <button onclick="switchTeacherTab('settings')" id="tabBtn-settings" class="px-4 py-2.5 text-xs font-extrabold border-b-2 hover:text-slate-200 whitespace-nowrap border-amber-400 text-amber-300">
+          <i class="fa-solid fa-sliders mr-1.5"></i>Cài Đặt Game &amp; Sao Lưu
+        </button>
+      </div>
+
+      <!-- Tab Content Body -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-6 modal-scroll">
+        <!-- TAB 1: VOCABULARY & LESSONS -->
+        <div id="tabContent-vocab" class="space-y-4 hidden">
+          <!-- Lesson Selector Bar -->
+          <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-2.5">
+            <div class="flex flex-wrap items-center gap-2 flex-1 min-w-[220px]">
+              <label class="text-xs font-bold text-slate-300">Bài đang chọn:</label>
+              <select id="teacherLessonSelect" onchange="onTeacherLessonChange()" class="h-9 px-3 rounded-xl bg-slate-950 border border-slate-700 text-xs font-bold text-cyan-300 focus:outline-none focus:border-cyan-400"><option value="bai_mwppt0hl">GT4.2 第六课 (31 từ)</option>
+<option value="bai_mwprevol">GT4.2第七课 (33 từ)</option>
+<option value="bai_mwps9h0z">GT4.2 第八课 (29 từ)</option>
+<option value="bai_mwpsmfkr">GT4.2 第九课 (31 từ)</option>
+<option value="bai_mwpsnqqf">GT4.2  第十课 (30 từ)</option></select>
+              <button onclick="promptCreateNewLesson()" class="px-3 h-9 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-300 text-xs font-bold">
+                <i class="fa-solid fa-plus mr-1"></i> Tạo Bài Mới
+              </button>
+            </div>
+
+            <button onclick="openManageLessonsModal()" class="px-3 h-9 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-400/40 text-rose-300 text-xs font-bold">
+              <i class="fa-solid fa-folder-minus mr-1"></i> Quản Lý / Xóa Bài Cũ
+            </button>
+          </div>
+
+          <!-- New Lesson Inline Input (Hidden by default) -->
+          <div id="newLessonBox" class="bg-cyan-950/30 border border-cyan-500/40 rounded-2xl p-3 flex flex-wrap items-center gap-2 hidden">
+            <input id="newLessonNameInput" type="text" placeholder="Nhập tên bài mới (vd: Bài 6 - Mua sắm)..." class="flex-1 min-w-[200px] h-9 px-3 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-semibold">
+            <button onclick="confirmCreateNewLesson()" class="px-4 h-9 rounded-xl bg-cyan-400 text-slate-950 font-black text-xs">Lưu Tên Bài</button>
+            <button onclick="document.getElementById('newLessonBox').classList.add('hidden')" class="px-3 h-9 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs">Hủy</button>
+          </div>
+
+          <!-- Two Column Editor: Bulk Import & Single Add -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Bulk Import Space Separated -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex flex-col gap-2.5">
+              <div class="flex items-center justify-between">
+                <h4 class="text-xs font-black text-amber-300 uppercase tracking-wider">
+                  <i class="fa-solid fa-file-import mr-1"></i> Nhập Nhanh Hàng Loạt (Cách nhau dấu cách)
+                </h4>
+              </div>
+              <p class="text-[11px] text-slate-400">
+                Mỗi dòng 1 từ, giữa <b>chữ Hán</b> và <b>Pinyin</b> chỉ cần cách nhau bằng <b>dấu cách</b> (có thể copy từ Word/Excel dán vào):
+              </p>
+              <textarea id="bulkVocabTextarea" rows="5" placeholder="今天 jīntiān
+天气 tiānqì
+吃晚饭 chī wǎnfàn
+学习汉语 xuéxí Hànyǔ" class="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 focus:border-amber-400 focus:outline-none text-xs font-mono text-slate-200"></textarea>
+              <div class="flex items-center justify-between gap-2">
+                <label class="flex items-center gap-1.5 text-[11px] text-slate-300 cursor-pointer">
+                  <input id="bulkReplaceCheckbox" type="checkbox" class="rounded accent-amber-400">
+                  <span>Ghi đè toàn bộ từ cũ trong bài này</span>
+                </label>
+                <button onclick="importBulkVocab()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black text-xs shadow">
+                  <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Thêm Vào Bài
+                </button>
+              </div>
+            </div>
+
+            <!-- Add / Edit Single Word -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between gap-3">
+              <div>
+                <h4 id="singleWordFormTitle" class="text-xs font-black text-cyan-300 uppercase tracking-wider mb-2"><i class="fa-solid fa-plus-circle mr-1"></i> Thêm / Sửa Từng Từ Vựng</h4>
+                <div class="space-y-2.5">
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Chữ Hán (Hanzi)</label>
+                    <input id="singleHanziInput" type="text" placeholder="Ví dụ: 谢谢" class="hanzi-font w-full h-9 px-3 rounded-xl bg-slate-950 border border-slate-700 text-sm font-bold text-white">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Phiên âm Pinyin (có dấu hoặc không dấu)</label>
+                    <input id="singlePinyinInput" type="text" placeholder="Ví dụ: xièxie" class="w-full h-9 px-3 rounded-xl bg-slate-950 border border-slate-700 text-xs font-bold text-cyan-200">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Nghĩa tiếng Việt (tùy chọn)</label>
+                    <input id="singleMeaningInput" type="text" placeholder="Ví dụ: Cảm ơn" class="w-full h-9 px-3 rounded-xl bg-slate-950 border border-slate-700 text-xs text-slate-200">
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button id="btnCancelEditWord" onclick="cancelEditSingleWord()" class="hidden px-3 py-2 rounded-xl bg-slate-800 text-slate-300 font-bold text-xs">
+                  Hủy Sửa
+                </button>
+                <button onclick="saveSingleWord()" class="flex-1 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black text-xs">
+                  <i class="fa-solid fa-check mr-1"></i> Lưu Từ Vựng
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Word List Table -->
+          <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden">
+            <div class="px-4 py-2.5 bg-slate-950/70 border-b border-slate-800 flex items-center justify-between">
+              <span class="text-xs font-extrabold text-white">
+                Danh sách từ vựng trong bài (<span id="vocabCountBadge" class="text-cyan-400">30</span> từ)
+              </span>
+            </div>
+            <div class="max-h-60 overflow-y-auto modal-scroll">
+              <table class="w-full text-left border-collapse">
+                <thead class="bg-slate-950/50 text-[11px] text-slate-400 uppercase sticky top-0">
+                  <tr>
+                    <th class="py-2 px-3">#</th>
+                    <th class="py-2 px-3">Chữ Hán</th>
+                    <th class="py-2 px-3">Pinyin</th>
+                    <th class="py-2 px-3">Nghĩa</th>
+                    <th class="py-2 px-3 text-right">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="vocabTableBody" class="divide-y divide-slate-800/70 text-xs">
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">1</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">礼拜天</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">lǐbàitiān</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(0)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(0)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">2</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">空儿</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">kòngr</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(1)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(1)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">3</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">母亲</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">mǔqīn</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(2)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(2)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">4</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">不过</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">búguò</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(3)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(3)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">5</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">永远</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">yǒngyuǎn</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(4)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(4)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">6</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">方向</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">fāngxiàng</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(5)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(5)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">7</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">优秀</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">yōuxiù</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(6)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(6)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">8</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">硕士</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">shuòshì</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(7)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(7)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">9</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">翻译</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">fānyì</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(8)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(8)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">10</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">确实</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">quèshí</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(9)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(9)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">11</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">兴奋</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">xīngfèn</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(10)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(10)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">12</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">拉</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">lā</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(11)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(11)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">13</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">建议</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">jiànyì</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(12)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(12)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">14</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">职业</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">zhíyè</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(13)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(13)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">15</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">关键</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">guānjiàn</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(14)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(14)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">16</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">将来</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">jiānglái</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(15)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(15)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">17</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">发展</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">fāzhǎn</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(16)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(16)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">18</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">躺</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">tǎng</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(17)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(17)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">19</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">困</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">kùn</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(18)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(18)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">20</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">经济</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">jīngjì</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(19)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(19)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">21</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">条件</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">tiáojiàn</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(20)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(20)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">22</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">富</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">fù</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(21)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(21)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">23</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">穷</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">qióng</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(22)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(22)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">24</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">等</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">děng</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(23)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(23)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">25</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">由于</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">yóuyú</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(24)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(24)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">26</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">比如</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">bǐrú</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(25)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(25)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">27</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">橡皮</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">xiàngpí</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(26)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(26)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">28</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">糖</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">táng</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(27)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(27)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">29</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">低</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">dī</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(28)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(28)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      
+
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">30</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">答案</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">dáàn</td>
+          <td class="py-2 px-3 text-slate-300">—</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(29)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(29)" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: STUDENT SCORES -->
+        <div id="tabContent-scores" class="space-y-4 hidden">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-sm font-black text-white">Lịch Sử &amp; Bảng Xếp Hạng Học Sinh</h4>
+              <p class="text-xs text-slate-400">Lưu tự động sau mỗi lượt chơi hoàn tất trên thiết bị này</p>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="exportScoresCsv()" class="px-3 py-2 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-bold">
+                <i class="fa-solid fa-file-csv mr-1"></i> Xuất File CSV
+              </button>
+              <button onclick="clearAllScores()" class="px-3 py-2 rounded-xl bg-rose-500/15 border border-rose-400/40 text-rose-300 text-xs font-bold">
+                <i class="fa-solid fa-trash mr-1"></i> Xóa Lịch Sử
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden">
+            <div class="max-h-80 overflow-y-auto modal-scroll">
+              <table class="w-full text-left border-collapse">
+                <thead class="bg-slate-950/70 text-[11px] text-slate-400 uppercase sticky top-0">
+                  <tr>
+                    <th class="py-2.5 px-3">Học Sinh</th>
+                    <th class="py-2.5 px-3">Bài Học</th>
+                    <th class="py-2.5 px-3">Điểm</th>
+                    <th class="py-2.5 px-3">Từ Đúng</th>
+                    <th class="py-2.5 px-3">Chính Xác</th>
+                    <th class="py-2.5 px-3">Thời Gian</th>
+                  </tr>
+                </thead>
+                <tbody id="tableScoresBody" class="divide-y divide-slate-800/70 text-xs"><tr><td colspan="6" class="py-6 text-center text-slate-500">Chưa có lượt chơi nào được ghi nhận</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: GAME SETTINGS & BACKUP -->
+        <div id="tabContent-settings" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3">
+              <h4 class="text-xs font-black text-cyan-300 uppercase">Thông Số Trận Đấu</h4>
+              <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Thời gian mỗi lượt (giây)</label>
+                <input id="cfgGameTime" type="number" min="30" max="300" value="90" class="w-full h-9 px-3 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Số từ mục tiêu tối đa mỗi lượt</label>
+                <input id="cfgTargetWords" type="number" min="5" max="60" value="15" class="w-full h-9 px-3 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Tốc độ rơi mặc định của game</label>
+                <select id="cfgMeteorSpeed" class="w-full h-9 px-3 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-bold">
+                  <option value="0.7">0.7x (Siêu chậm - Mới bắt đầu)</option>
+                  <option value="0.8">0.8x (Rất chậm - Dễ làm quen)</option>
+                  <option value="0.85" selected="">0.85x (Chậm vừa - Tiêu chuẩn lớp học)</option>
+                  <option value="0.9">0.9x (Chậm nhẹ - Tăng phản xạ)</option>
+                  <option value="1.0">1.0x (Tiêu chuẩn)</option>
+                  <option value="1.15">1.15x (Nhanh - Nâng cao)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 space-y-3">
+              <h4 class="text-xs font-black text-amber-300 uppercase">Bảo Mật &amp; Đóng Gói File Web</h4>
+              <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Đổi mã bí mật giáo viên</label>
+                <input id="cfgTeacherPin" type="password" maxlength="12" placeholder="••••" class="w-full h-9 px-3 rounded-xl bg-slate-950 border border-slate-700 text-xs text-amber-300 font-bold">
+              </div>
+              <button onclick="saveGameConfig()" class="w-full py-2.5 rounded-xl bg-amber-400 text-slate-950 font-black text-xs">
+                <i class="fa-solid fa-floppy-disk mr-1"></i> Lưu Cài Đặt
+              </button>
+              <div class="pt-2 border-t border-slate-800">
+                <p class="text-[11px] text-slate-400 mb-2">Tải file <b>index.html</b> đã đóng gói sẵn toàn bộ bài học mới nhất để đưa lên GitHub Pages / Netlify:</p>
+                <button onclick="downloadStandaloneGameHtml()" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs">
+                  <i class="fa-solid fa-download mr-1"></i> Tải Tệp index.html Đóng Gói Bài Học
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: MANAGE / DELETE OLD LESSONS ==================== -->
+  <div id="modalManageLessons" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 hidden">
+    <div class="glass-panel rounded-3xl max-w-md w-full p-5 border border-rose-400/40">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-base font-black text-white"><i class="fa-solid fa-folder-open text-rose-400 mr-1.5"></i> Quản Lý &amp; Xóa Bài Cũ</h3>
+        <button onclick="document.getElementById('modalManageLessons').classList.add('hidden')" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-400 mb-3">Chọn các bài học cũ không dùng nữa để xóa (luôn giữ lại tối thiểu 1 bài học).</p>
+      <div id="manageLessonsList" class="max-h-64 overflow-y-auto space-y-2 mb-4 modal-scroll">
+          <div class="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-xl px-3 py-2">
+            <label class="flex items-center gap-2 text-xs font-bold text-slate-200 cursor-pointer">
+              <input type="checkbox" value="bai_mwppt0hl" class="lesson-del-checkbox rounded accent-rose-500">
+              <span>GT4.2 第六课 <span class="text-slate-400 font-normal">(31 từ)</span></span>
+            </label>
+            <button onclick="deleteSingleLessonByKey('bai_mwppt0hl')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 text-[11px] font-bold">
+              Xóa
+            </button>
+          </div>
+        
+
+          <div class="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-xl px-3 py-2">
+            <label class="flex items-center gap-2 text-xs font-bold text-slate-200 cursor-pointer">
+              <input type="checkbox" value="bai_mwprevol" class="lesson-del-checkbox rounded accent-rose-500">
+              <span>GT4.2第七课 <span class="text-slate-400 font-normal">(33 từ)</span></span>
+            </label>
+            <button onclick="deleteSingleLessonByKey('bai_mwprevol')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 text-[11px] font-bold">
+              Xóa
+            </button>
+          </div>
+        </div>
+      <div class="flex gap-2">
+        <button onclick="deleteSelectedLessons()" class="flex-1 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-black text-xs">
+          <i class="fa-solid fa-trash-can mr-1"></i> Xóa Các Bài Đã Chọn
+        </button>
+        <button onclick="document.getElementById('modalManageLessons').classList.add('hidden')" class="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-200 font-bold text-xs">
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: SHARE QR & STUDENT LINK ==================== -->
+  <div id="modalShareLink" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 hidden">
+    <div class="glass-panel rounded-3xl max-w-md w-full p-5 sm:p-6 text-center border border-emerald-400/40 max-h-[92dvh] overflow-y-auto modal-scroll">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-extrabold text-emerald-300 uppercase tracking-wider">
+          <i class="fa-solid fa-qrcode mr-1"></i> Mời Học Sinh Tham Gia
+        </span>
+        <button onclick="document.getElementById('modalShareLink').classList.add('hidden')" class="w-7 h-7 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <h3 class="text-lg font-black text-white mb-1">Quét Mã QR Hoặc Gửi Link</h3>
+      <p class="text-xs text-slate-300 mb-3">Học sinh dùng điện thoại quét mã để vào chơi ngay</p>
+
+      <!-- Clean QR Code Container -->
+      <div class="mx-auto w-44 h-44 bg-white p-2.5 rounded-2xl shadow-lg flex items-center justify-center mb-3">
+        <div id="qrCodeContainer" class="w-full h-full flex items-center justify-center" title="https://chautrieuvy2704.github.io/gamebmb/"><canvas width="154" height="154" style="display: none;"></canvas><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJoAAACaCAYAAABR/1EXAAAIg0lEQVR4AeycXY7cNhCEB3uB5C0+Q3z/o+QOefQNHPQYysrcrzXd4s+QUhnonVGp+ofFgkDBXn/88dffP2eLn/CHZgTaE4pyiedhz8KBH7Pme3ONwj8e+iMFBiggow0QWS0eDxlNLhiigIw2RGY1QaP9+Pefx4jIyE/z/Pnt+4OC6kZ5lku9DK8J6k8Y9TaMuJl5rMaI8GZCo3lk4R0VuHhpGe3iGzzL8mS0WXbi4nPIaBff4FmWFzYaHUYzWO2CqVemZuYgTL0I69Gf+hhG82f6E9fq1gTV9LCw0bwCwqVARAEZLaKSONUKLGS06rWqwBsVkNHeKP6dWt/aaN5BOGoAyqdDu2HEJcy4FMSNzjkD79ZGm2ED7jKDjHaXnX7zOmW0N2/AXdrLaHfZ6YbrPFNKRjujmnLSCixtNHo787DMWxvViCpLfQyjmoQZlyLaf1be0kabVVTN9VUBGe2rJkI6KCCjdRBVJb8qIKN91URIBwXCRqODawarnZ16eTWjh2mqaVht/g/45R6qSZi3ph64rbUmMjOFjZYpKq4UKBWQ0UpFdN1FARmti6wqWiogo5WK6LqLAmg0OqT2wDIrov6ZfDr0Uk3DiBvtZfkU0ZrEMyza3+PRTD0wrz8azSMLlwJnFXiT0c6Oq7xVFZDRVt25xeaW0RbbsFXHldFW3bnF5v6wN5rZgjSkGYnXC6P+9Nbm9SdutKblEpd6EW8GTE802i1hzRWQ0ZpLulbBUdPKaKOUvnkfGe3mBhi1/A87aLaO6PBeX8onLvE8rEc+HbK9/oRnZiIuYdTHwyg/g1FdL19PNFJLWHMFZLTmkqogKSCjkSrCmisgo72SVPebKIBGo0NuBqMDIU3r1Yxyiedh1MvjEj5jPs1E2ntYdJ3UxzDK9zA0mkcWLgXOKiCjnVVOeSkFZLSUXCKfVUBGO6uc8lIKyGgpuUQ+qwD+ezR6S/EbnL9DfQyjioZHI5pPPMNq+lh+TdjbHEV0JsrNYN7stf31RPOUFd5UARmtqZwq5ikgo3nKCG+qgIzWVE4V8xTAf49G5Ohh0Hh0+DS8DOIZVvLsmmbKYFY3GlSXcm2uMohnGNXMYFYjEuU8R9cj++uJllF7cu7M48loM+/OhWaT0S60mTMvRUabeXcuNBv+zUB0fd7hlPKJ6x1UiUs1azGvP9UlbmbOHvk0J81kGHEJozk9jPKtF4WeaKSWsOYKyGjNJVVBUuBeRiMFhA1RQEYbIrOayGjywBAF8K+g6K2BsMzbCHGppmHEzahhNcqorUn9MzXLeew6WtP6ZLjGL8P6lUE1S852Tdyyx9G1nmikoLDmCshozSVVQVJARiNVhDVXoDBa8/oqKAWeCoSNRge97aBYfj4rB35QTcPKenYdKJemWF2KaKGa3GiPI16mv+laxlHt1vfCRmvdWPXupYCMdq/9fttqZbS3SX+vxjLavfb7basNG6324En5HlYeWu16pEI0V7S/zUoRzd96Rz4zfahebT6tifoYFjYaFRUmBaIKyGhRpcSrUkBGq5JPyVEFZLSoUuJVKYBGix4SiWeYHf7KoCmNS0HcDEY1y3nsmngeZvwyiFtytmuan/I9jPIJ2/qVn1SX8olnGHEzGBotU0BcKRBRYF2jRVYnzjQKyGjTbMW1B5HRrr2/06xORptmK649SPi/RLA3jzIy0pS5dl2+GW3XVHe7t/8knmF7zvbd8DK2e+VnyRt5Xc6yXZteZWz39p+ZWfd523cvv+xt1x6XcD3RSBVhzRWQ0ZpLeruCoQXLaCGZRKpVQEarVVD5IQXCv6keqpYk2YGSgsoQbzvAlp+UPwqjOQ2j/uXcdk08w+xeGVY3GmWuXVOu4RQ2QxlRnuXpiWYqKLorIKN1l1gNTAEZzVRQdFdARusu8eOhFo9H+G8GMgc/OmSS2FTTwyjfw6g/YV4+zUD5xPMwyqf+xDOMuITV9qeaLTA90VqoqBovFZDRXkokQgsFZLQWKqrGSwVktJcSidBCARmthYqq8VIBNJq95UTCe8OJ4v/3+Pb98eo7rcTLIS7NRDwPo3yvP+FUN8qz3CiXeIZZjUgYlyKSe8RBox0l6J4UOKOAjHZGNeWkFZDR0pIp4YwCMtoZ1ZSTVgCNRgdfwtLdigSq6WFF6vPS4xL+TAj+iB6Ga/sEx3Fp1D+DuYWDN0gnD0OjBfuIdj0Fuq1IRusmrQrvFZDR9mroezcFZLRu0qrwXgH85RTvQDcK3w+4fadDbmaerU7vT5rTMOpreBnEy2CeJpkaxC3ntOsoz7h6opFawporIKM1l1QFSQEZjVQ5wHTrnAIy2jndlJVUQEZLCib6OQXQaPaWMCLOjfyZlZnRexsj/LPD5zfiEfaZ8fs3mvV3xq8r4hn26+7rn8aleJ2ZZ2T6oNHyLZUhBY4VkNGO9dHdRgrIaI2EVJljBdob7bif7t5UgbDR6OCbwUbqS3NRfzrM1mLUx7DoTMaNBtXMYNTHW3+mLnHDRqOhhEmBqAIyWlQp8aoUkNGq5FNyVAEZLaqUeFUKLGM0OmB6K6cDrcclnHpFMarnYdGaxvNqlPhu7Y/995LnXVsvin2to+9e3WWM5i1A+BoKyGhr7NPyU8poy2/hGguQ0dbYp+WnlNGW38I1FrC00ejtyMPoTSnDpe0cVZP6eBjN6WFeDcJJK68u4UsbjRaUwcQdp4CMNk7rW3eS0W69/eMWL6ON0/rWncJGowNiBuuhste/thcdfKkX9SGeYVEu9fYwqlmLeb1sDWUQt+Rs12Gj1S5A+fdWQEa79/4PW/2x0YaNoUZXV0BGu/oOT7I+NBod8npgIzWg+beDauSzx6w0U6ZPbT718rQgbgZDo2UKiCsFIgrIaBGVxKlWQEarllAFIgrIaBGV3s9ZfgIZbfktXGMB/wEAAP//WxzG2QAAAAZJREFUAwCyqvt5C2fEJwAAAABJRU5ErkJggg==" style="display: block;"></div>
+      </div>
+
+      <!-- URL Copy Box -->
+      <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-xl p-1.5 mb-3">
+        <input id="inputShareableStudentUrl" type="text" readonly="" class="flex-1 bg-transparent text-[11px] text-cyan-300 px-2 focus:outline-none font-mono">
+        <button onclick="copyShareStudentUrl()" id="btnCopyShareUrl" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shrink-0">
+          Sao Chép
+        </button>
+      </div>
+
+      <!-- Download Standalone HTML Button -->
+      <button onclick="downloadStandaloneGameHtml()" class="w-full py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-200 font-bold text-xs mb-3 flex items-center justify-center gap-1.5">
+        <i class="fa-solid fa-file-code"></i>
+        <span>Tải Tệp index.html (Đưa lên GitHub Pages / Netlify)</span>
+      </button>
+
+      <!-- Privacy & Legal Assurance Notice -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 text-left text-[11px] text-slate-300 space-y-1">
+        <div class="font-extrabold text-emerald-400 flex items-center gap-1.5">
+          <i class="fa-solid fa-shield-check"></i>
+          <span>Cam Kết Bảo Mật &amp; An Toàn Dữ Liệu Học Sinh</span>
+        </div>
+        <p class="text-slate-400 leading-relaxed">
+          Trò chơi hoạt động hoàn toàn không cần đăng nhập tài khoản, không truy cập danh bạ, vị trí, camera hay bất kỳ dữ liệu cá nhân nào trên thiết bị của học sinh ngoài <b>tên học sinh tự nhập</b> và <b>kết quả lượt chơi</b>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMBEDDED DEFAULT DATA (AUTO-UPDATED WHEN TEACHER DOWNLOADS STANDALONE HTML) -->
+  <script id="embedded-lesson-data" type="application/json">
+{
+  "lessons": {
+    "bai_mwppt0hl": {
+      "name": "GT4.2 第六课",
+      "words": [
+        {
+          "hanzi": "果汁",
+          "pinyin": "guǒzhī",
+          "meaning": ""
+        },
+        {
+          "hanzi": "售货员",
+          "pinyin": "shòuhuòyuán",
+          "meaning": ""
+        },
+        {
+          "hanzi": "袜子",
+          "pinyin": "wàzi",
+          "meaning": ""
+        },
+        {
+          "hanzi": "打扰",
+          "pinyin": "dǎrǎo",
+          "meaning": ""
+        },
+        {
+          "hanzi": "竟然",
+          "pinyin": "jìngrán",
+          "meaning": ""
+        },
+        {
+          "hanzi": "西红柿",
+          "pinyin": "xīhóngshì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "百分之",
+          "pinyin": "bǎifēnzhī",
+          "meaning": ""
+        },
+        {
+          "hanzi": "倍",
+          "pinyin": "bèi",
+          "meaning": ""
+        },
+        {
+          "hanzi": "皮肤",
+          "pinyin": "pífū",
+          "meaning": ""
+        },
+        {
+          "hanzi": "好处",
+          "pinyin": "hǎochù",
+          "meaning": ""
+        },
+        {
+          "hanzi": "尝",
+          "pinyin": "cháng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "轻",
+          "pinyin": "qīng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "方面",
+          "pinyin": "fāngmiàn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "值得",
+          "pinyin": "zhídé",
+          "meaning": ""
+        },
+        {
+          "hanzi": "活动",
+          "pinyin": "huódòng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "内",
+          "pinyin": "nèi",
+          "meaning": ""
+        },
+        {
+          "hanzi": "免费",
+          "pinyin": "miǎnfèi",
+          "meaning": ""
+        },
+        {
+          "hanzi": "修理",
+          "pinyin": "xiūlǐ",
+          "meaning": ""
+        },
+        {
+          "hanzi": "支持",
+          "pinyin": "zhīchí",
+          "meaning": ""
+        },
+        {
+          "hanzi": "举行",
+          "pinyin": "jǔxíng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "满",
+          "pinyin": "mǎn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "其中",
+          "pinyin": "qízhōng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "小说",
+          "pinyin": "xiǎoshuō",
+          "meaning": ""
+        },
+        {
+          "hanzi": "会员卡",
+          "pinyin": "huìyuánkǎ",
+          "meaning": ""
+        },
+        {
+          "hanzi": "所有",
+          "pinyin": "suǒyǒu",
+          "meaning": ""
+        },
+        {
+          "hanzi": "获得",
+          "pinyin": "huòdé",
+          "meaning": ""
+        },
+        {
+          "hanzi": "情况",
+          "pinyin": "qíngkuàng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "举办",
+          "pinyin": "jǔbàn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "各",
+          "pinyin": "gè",
+          "meaning": ""
+        },
+        {
+          "hanzi": "例如",
+          "pinyin": "lìrú",
+          "meaning": ""
+        },
+        {
+          "hanzi": "降低",
+          "pinyin": "jiàngdī",
+          "meaning": ""
+        }
+      ]
+    },
+    "bai_mwprevol": {
+      "name": "GT4.2第七课",
+      "words": [
+        {
+          "hanzi": "流血",
+          "pinyin": "liúxiě",
+          "meaning": ""
+        },
+        {
+          "hanzi": "擦",
+          "pinyin": "cā",
+          "meaning": ""
+        },
+        {
+          "hanzi": "气候",
+          "pinyin": "qìhòu",
+          "meaning": ""
+        },
+        {
+          "hanzi": "估计",
+          "pinyin": "gūjì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "咳嗽",
+          "pinyin": "késou",
+          "meaning": ""
+        },
+        {
+          "hanzi": "严重",
+          "pinyin": "yánzhòng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "窗户",
+          "pinyin": "chuānghu",
+          "meaning": ""
+        },
+        {
+          "hanzi": "空气",
+          "pinyin": "kōngqì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "抽烟",
+          "pinyin": "chōuyān",
+          "meaning": ""
+        },
+        {
+          "hanzi": "动作",
+          "pinyin": "dòngzuò",
+          "meaning": ""
+        },
+        {
+          "hanzi": "帅",
+          "pinyin": "shuài",
+          "meaning": ""
+        },
+        {
+          "hanzi": "出现",
+          "pinyin": "chūxiàn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "后悔",
+          "pinyin": "hòuhuǐ",
+          "meaning": ""
+        },
+        {
+          "hanzi": "来不及",
+          "pinyin": "láibují",
+          "meaning": ""
+        },
+        {
+          "hanzi": "反对",
+          "pinyin": "fǎnduì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "大夫",
+          "pinyin": "dàifu",
+          "meaning": ""
+        },
+        {
+          "hanzi": "植物",
+          "pinyin": "zhíwù",
+          "meaning": ""
+        },
+        {
+          "hanzi": "研究",
+          "pinyin": "yánjiū",
+          "meaning": ""
+        },
+        {
+          "hanzi": "超过",
+          "pinyin": "chāoguò",
+          "meaning": ""
+        },
+        {
+          "hanzi": "散步",
+          "pinyin": "sànbù",
+          "meaning": ""
+        },
+        {
+          "hanzi": "指",
+          "pinyin": "zhǐ",
+          "meaning": ""
+        },
+        {
+          "hanzi": "精神",
+          "pinyin": "jīngshén",
+          "meaning": ""
+        },
+        {
+          "hanzi": "教授",
+          "pinyin": "jiàoshòu",
+          "meaning": ""
+        },
+        {
+          "hanzi": "数字",
+          "pinyin": "shùzì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "说明",
+          "pinyin": "shuōmíng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "要是",
+          "pinyin": "yàoshi",
+          "meaning": ""
+        },
+        {
+          "hanzi": "既",
+          "pinyin": "jì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "减肥",
+          "pinyin": "jiǎnféi",
+          "meaning": ""
+        },
+        {
+          "hanzi": "辛苦",
+          "pinyin": "xīnkǔ",
+          "meaning": ""
+        },
+        {
+          "hanzi": "肚子",
+          "pinyin": "dùzi",
+          "meaning": ""
+        },
+        {
+          "hanzi": "感情",
+          "pinyin": "gǎnqíng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "烦恼",
+          "pinyin": "fánnǎo",
+          "meaning": ""
+        },
+        {
+          "hanzi": "掉",
+          "pinyin": "diào",
+          "meaning": ""
+        }
+      ]
+    },
+    "bai_mwps9h0z": {
+      "name": "GT4.2 第八课",
+      "words": [
+        {
+          "hanzi": "巧克力",
+          "pinyin": "qiǎokèlì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "亲戚",
+          "pinyin": "qīnqi",
+          "meaning": ""
+        },
+        {
+          "hanzi": "伤心",
+          "pinyin": "shāngxīn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "使",
+          "pinyin": "shǐ",
+          "meaning": ""
+        },
+        {
+          "hanzi": "心情",
+          "pinyin": "xīnqíng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "愉快",
+          "pinyin": "yúkuài",
+          "meaning": ""
+        },
+        {
+          "hanzi": "景色",
+          "pinyin": "jǐngsè",
+          "meaning": ""
+        },
+        {
+          "hanzi": "放松",
+          "pinyin": "fàngsōng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "压力",
+          "pinyin": "yālì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "回忆",
+          "pinyin": "huíyì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "发生",
+          "pinyin": "fāshēng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "成为",
+          "pinyin": "chéngwéi",
+          "meaning": ""
+        },
+        {
+          "hanzi": "只要",
+          "pinyin": "zhǐyào",
+          "meaning": ""
+        },
+        {
+          "hanzi": "师傅",
+          "pinyin": "shīfu",
+          "meaning": ""
+        },
+        {
+          "hanzi": "大使馆",
+          "pinyin": "dàshǐguǎn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "堵车",
+          "pinyin": "dǔchē",
+          "meaning": ""
+        },
+        {
+          "hanzi": "距离",
+          "pinyin": "jùlí",
+          "meaning": ""
+        },
+        {
+          "hanzi": "耐心",
+          "pinyin": "nàixīn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "生命",
+          "pinyin": "shēngmìng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "缺少",
+          "pinyin": "quēshǎo",
+          "meaning": ""
+        },
+        {
+          "hanzi": "到处",
+          "pinyin": "dàochù",
+          "meaning": ""
+        },
+        {
+          "hanzi": "态度",
+          "pinyin": "tàidù",
+          "meaning": ""
+        },
+        {
+          "hanzi": "因此",
+          "pinyin": "yīncǐ",
+          "meaning": ""
+        },
+        {
+          "hanzi": "科学",
+          "pinyin": "kēxué",
+          "meaning": ""
+        },
+        {
+          "hanzi": "证明",
+          "pinyin": "zhèngmíng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "往往",
+          "pinyin": "wǎngwǎng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "阳光",
+          "pinyin": "yángguāng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "积极",
+          "pinyin": "jījí",
+          "meaning": ""
+        },
+        {
+          "hanzi": "特点",
+          "pinyin": "tèdiǎn",
+          "meaning": ""
+        }
+      ]
+    },
+    "bai_mwpsmfkr": {
+      "name": "GT4.2 第九课",
+      "words": [
+        {
+          "hanzi": "饼干",
+          "pinyin": "bǐnggān",
+          "meaning": ""
+        },
+        {
+          "hanzi": "难道",
+          "pinyin": "nándào",
+          "meaning": ""
+        },
+        {
+          "hanzi": "得",
+          "pinyin": "děi",
+          "meaning": ""
+        },
+        {
+          "hanzi": "坚持",
+          "pinyin": "jiānchí",
+          "meaning": ""
+        },
+        {
+          "hanzi": "放弃",
+          "pinyin": "fàngqì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "主意",
+          "pinyin": "zhǔyi",
+          "meaning": ""
+        },
+        {
+          "hanzi": "网球",
+          "pinyin": "wǎngqiú",
+          "meaning": ""
+        },
+        {
+          "hanzi": "国际",
+          "pinyin": "guójì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "轻松",
+          "pinyin": "qīngsòng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "赢",
+          "pinyin": "yíng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "随便",
+          "pinyin": "suíbiàn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "汗",
+          "pinyin": "hàn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "通过",
+          "pinyin": "tōngguò",
+          "meaning": ""
+        },
+        {
+          "hanzi": "篇",
+          "pinyin": "piān",
+          "meaning": ""
+        },
+        {
+          "hanzi": "作家",
+          "pinyin": "zuòjiā",
+          "meaning": ""
+        },
+        {
+          "hanzi": "当时",
+          "pinyin": "dāngshí",
+          "meaning": ""
+        },
+        {
+          "hanzi": "可是",
+          "pinyin": "kěshì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "正确",
+          "pinyin": "zhèngquè",
+          "meaning": ""
+        },
+        {
+          "hanzi": "理想",
+          "pinyin": "lǐxiǎng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "勇敢",
+          "pinyin": "yǒnggǎn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "结果",
+          "pinyin": "jiéguǒ",
+          "meaning": ""
+        },
+        {
+          "hanzi": "失败",
+          "pinyin": "shībài",
+          "meaning": ""
+        },
+        {
+          "hanzi": "过程",
+          "pinyin": "guòchéng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "至少",
+          "pinyin": "zhìshǎo",
+          "meaning": ""
+        },
+        {
+          "hanzi": "总结",
+          "pinyin": "zǒngjié",
+          "meaning": ""
+        },
+        {
+          "hanzi": "取",
+          "pinyin": "qǔ",
+          "meaning": ""
+        },
+        {
+          "hanzi": "经历",
+          "pinyin": "jīnglì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "许多",
+          "pinyin": "xǔduō",
+          "meaning": ""
+        },
+        {
+          "hanzi": "区别",
+          "pinyin": "qūbié",
+          "meaning": ""
+        },
+        {
+          "hanzi": "暂时",
+          "pinyin": "zànshí",
+          "meaning": ""
+        },
+        {
+          "hanzi": "面对",
+          "pinyin": "miànduì",
+          "meaning": ""
+        }
+      ]
+    },
+    "bai_mwpsnqqf": {
+      "name": "GT4.2  第十课",
+      "words": [
+        {
+          "hanzi": "礼拜天",
+          "pinyin": "lǐbàitiān",
+          "meaning": ""
+        },
+        {
+          "hanzi": "空儿",
+          "pinyin": "kòngr",
+          "meaning": ""
+        },
+        {
+          "hanzi": "母亲",
+          "pinyin": "mǔqīn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "不过",
+          "pinyin": "búguò",
+          "meaning": ""
+        },
+        {
+          "hanzi": "永远",
+          "pinyin": "yǒngyuǎn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "方向",
+          "pinyin": "fāngxiàng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "优秀",
+          "pinyin": "yōuxiù",
+          "meaning": ""
+        },
+        {
+          "hanzi": "硕士",
+          "pinyin": "shuòshì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "翻译",
+          "pinyin": "fānyì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "确实",
+          "pinyin": "quèshí",
+          "meaning": ""
+        },
+        {
+          "hanzi": "兴奋",
+          "pinyin": "xīngfèn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "拉",
+          "pinyin": "lā",
+          "meaning": ""
+        },
+        {
+          "hanzi": "建议",
+          "pinyin": "jiànyì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "职业",
+          "pinyin": "zhíyè",
+          "meaning": ""
+        },
+        {
+          "hanzi": "关键",
+          "pinyin": "guānjiàn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "将来",
+          "pinyin": "jiānglái",
+          "meaning": ""
+        },
+        {
+          "hanzi": "发展",
+          "pinyin": "fāzhǎn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "躺",
+          "pinyin": "tǎng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "困",
+          "pinyin": "kùn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "经济",
+          "pinyin": "jīngjì",
+          "meaning": ""
+        },
+        {
+          "hanzi": "条件",
+          "pinyin": "tiáojiàn",
+          "meaning": ""
+        },
+        {
+          "hanzi": "富",
+          "pinyin": "fù",
+          "meaning": ""
+        },
+        {
+          "hanzi": "穷",
+          "pinyin": "qióng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "等",
+          "pinyin": "děng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "由于",
+          "pinyin": "yóuyú",
+          "meaning": ""
+        },
+        {
+          "hanzi": "比如",
+          "pinyin": "bǐrú",
+          "meaning": ""
+        },
+        {
+          "hanzi": "橡皮",
+          "pinyin": "xiàngpí",
+          "meaning": ""
+        },
+        {
+          "hanzi": "糖",
+          "pinyin": "táng",
+          "meaning": ""
+        },
+        {
+          "hanzi": "低",
+          "pinyin": "dī",
+          "meaning": ""
+        },
+        {
+          "hanzi": "答案",
+          "pinyin": "dáàn",
+          "meaning": ""
+        }
+      ]
+    }
+  },
+  "config": {
+    "gameTime": 120,
+    "targetWords": 31,
+    "meteorSpeed": 0.85,
+    "teacherPin": "0885"
+  }
+}
+  </script>
+
+  <script>
+    // ==================== STATE & STORAGE INITIALIZATION ====================
+    const STORAGE_KEYS = {
+      LESSONS: 'hanzi_cosmic_lessons_v2',
+      CONFIG: 'hanzi_cosmic_config_v2',
+      SCORES: 'hanzi_cosmic_scores_v2',
+      ACTIVE_LESSON: 'hanzi_cosmic_active_lesson_v2'
+    };
+
+    function getEmbeddedDefaults() {
+      try {
+        const raw = document.getElementById('embedded-lesson-data').textContent;
+        return JSON.parse(raw);
+      } catch (e) {
+        return {
+          lessons: {
+            bai_1: {
+              name: 'Bài 1: Cơ bản',
+              words: [{ hanzi: '你好', pinyin: 'nǐhǎo', meaning: 'Xin chào' }]
+            }
+          },
+          config: { gameTime: 90, targetWords: 15, meteorSpeed: 0.85, teacherPin: '0885' }
+        };
+      }
+    }
+
+    const EMBEDDED_DEFAULTS = getEmbeddedDefaults();
+
+    let appLessons = {};
+    let appConfig = { ...EMBEDDED_DEFAULTS.config };
+    let appScores = [];
+    let currentActiveTeacherLessonKey = '';
+    let editingWordIndex = -1;
+    let isTeacherUnlocked = false;
+    let selectedStudentShip = 'falcon';
+
+    function loadPersistentState() {
+      try {
+        const savedLessons = localStorage.getItem(STORAGE_KEYS.LESSONS);
+        if (savedLessons) {
+          const parsed = JSON.parse(savedLessons);
+          if (parsed && Object.keys(parsed).length > 0) {
+            appLessons = parsed;
+          } else {
+            appLessons = JSON.parse(JSON.stringify(EMBEDDED_DEFAULTS.lessons));
+          }
+        } else {
+          appLessons = JSON.parse(JSON.stringify(EMBEDDED_DEFAULTS.lessons));
+        }
+
+        const savedConfig = localStorage.getItem(STORAGE_KEYS.CONFIG);
+        if (savedConfig) {
+          appConfig = { ...EMBEDDED_DEFAULTS.config, ...JSON.parse(savedConfig) };
+        }
+
+        const savedScores = localStorage.getItem(STORAGE_KEYS.SCORES);
+        if (savedScores) {
+          appScores = JSON.parse(savedScores) || [];
+        }
+
+        const savedActive = localStorage.getItem(STORAGE_KEYS.ACTIVE_LESSON);
+        const keys = Object.keys(appLessons);
+        currentActiveTeacherLessonKey = (savedActive && appLessons[savedActive]) ? savedActive : keys[0];
+      } catch (e) {
+        appLessons = JSON.parse(JSON.stringify(EMBEDDED_DEFAULTS.lessons));
+        currentActiveTeacherLessonKey = Object.keys(appLessons)[0];
+      }
+    }
+
+    function savePersistentState() {
+      try {
+        localStorage.setItem(STORAGE_KEYS.LESSONS, JSON.stringify(appLessons));
+        localStorage.setItem(STORAGE_KEYS.CONFIG, JSON.stringify(appConfig));
+        localStorage.setItem(STORAGE_KEYS.SCORES, JSON.stringify(appScores));
+        localStorage.setItem(STORAGE_KEYS.ACTIVE_LESSON, currentActiveTeacherLessonKey);
+        const statusEl = document.getElementById('teacherSaveStatus');
+        if (statusEl) {
+          const now = new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          statusEl.textContent = `Đã lưu tự động lúc ${now}`;
+        }
+      } catch (e) {
+        console.warn('Storage save warning:', e);
+      }
+      populateLessonDropdowns();
+    }
+
+    // ==================== PINYIN NORMALIZATION ====================
+    const TONE_MAP = {
+      'ā':'a','á':'a','ǎ':'a','à':'a',
+      'ē':'e','é':'e','ě':'e','è':'e',
+      'ī':'i','í':'i','ǐ':'i','ì':'i',
+      'ō':'o','ó':'o','ǒ':'o','ò':'o',
+      'ū':'u','ú':'u','ǔ':'u','ù':'u',
+      'ǖ':'v','ǘ':'v','ǚ':'v','ǜ':'v','ü':'v'
+    };
+
+    function normalizePinyin(str) {
+      if (!str) return '';
+      return str
+        .toLowerCase()
+        .trim()
+        .replace(/[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü]/g, ch => TONE_MAP[ch] || ch)
+        .replace(/[1-5]/g, '')
+        .replace(/[^a-z]/g, '');
+    }
+
+    // ==================== WEB AUDIO SYNTHESIZER ====================
+    let audioCtx = null;
+    let sfxEnabled = true;
+    let bgmEnabled = true;
+    let bgmInterval = null;
+    let bgmStep = 0;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSoftBgNote() {
+      if (!bgmEnabled || gameState.status !== 'playing') return;
+      if (!audioCtx || audioCtx.state === 'suspended') return;
+
+      // Gentle pentatonic cosmic arpeggio + low warm pad
+      const melody = [261.63, 293.66, 392.00, 440.00, 523.25, 440.00, 392.00, 329.63];
+      const bass = [130.81, 130.81, 146.83, 146.83, 174.61, 174.61, 196.00, 196.00];
+      const idx = bgmStep % melody.length;
+
+      const now = audioCtx.currentTime;
+      // Soft lead note
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(melody[idx], now);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.linearRampToValueAtTime(0.018, now + 0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0004, now + 0.42);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.44);
+
+      // Subtle low pulse every 2 steps
+      if (idx % 2 === 0) {
+        const sub = audioCtx.createOscillator();
+        const subGain = audioCtx.createGain();
+        sub.type = 'triangle';
+        sub.frequency.setValueAtTime(bass[idx], now);
+        subGain.gain.setValueAtTime(0.0001, now);
+        subGain.gain.linearRampToValueAtTime(0.012, now + 0.05);
+        subGain.gain.exponentialRampToValueAtTime(0.0004, now + 0.78);
+        sub.connect(subGain);
+        subGain.connect(audioCtx.destination);
+        sub.start(now);
+        sub.stop(now + 0.8);
+      }
+
+      bgmStep++;
+    }
+
+    function ensureGameplayBgmLoop() {
+      if (bgmInterval) return;
+      bgmInterval = setInterval(playSoftBgNote, 360);
+    }
+
+    function playLaserSound() {
+      if (!sfxEnabled) return;
+      initAudio();
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(180, audioCtx.currentTime + 0.14);
+      gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.14);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.15);
+    }
+
+    function playExplosionSound(isReward = false) {
+      if (!sfxEnabled) return;
+      initAudio();
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = isReward ? 'triangle' : 'square';
+      osc.frequency.setValueAtTime(isReward ? 520 : 160, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(isReward ? 980 : 42, audioCtx.currentTime + 0.25);
+      gain.gain.setValueAtTime(0.16, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.26);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.27);
+    }
+
+    function toggleSfx() {
+      sfxEnabled = !sfxEnabled;
+      const btn = document.getElementById('btnToggleSfx');
+      btn.innerHTML = sfxEnabled ? '<i class="fa-solid fa-volume-high"></i>' : '<i class="fa-solid fa-volume-xmark text-slate-500"></i>';
+    }
+
+    function syncBgmButtonUi() {
+      const btn = document.getElementById('btnToggleBgm');
+      if (!btn) return;
+      if (bgmEnabled) {
+        btn.classList.add('bg-amber-500/25', 'border-amber-400');
+        btn.innerHTML = '<i class="fa-solid fa-music"></i>';
+      } else {
+        btn.classList.remove('bg-amber-500/25', 'border-amber-400');
+        btn.innerHTML = '<i class="fa-solid fa-volume-mute text-slate-500"></i>';
+      }
+    }
+
+    function toggleBgm() {
+      bgmEnabled = !bgmEnabled;
+      if (bgmEnabled) {
+        initAudio();
+        ensureGameplayBgmLoop();
+      }
+      syncBgmButtonUi();
+    }
+
+    // ==================== GAME ENGINE (CANVAS, SHIPS, HANZI TARGETS & REWARD METEORS) ====================
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let canvasW = window.innerWidth;
+    let canvasH = window.innerHeight;
+
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvasW = rect.width;
+      canvasH = rect.height;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = canvasW * dpr;
+      canvas.height = canvasH * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (playerShip) {
+        playerShip.x = canvasW / 2;
+        playerShip.y = canvasH - (canvasW < 640 ? 92 : 108);
+      }
+    }
+    window.addEventListener('resize', resizeCanvas);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', resizeCanvas);
+    }
+
+    // Starfield background
+    const stars = Array.from({ length: 85 }, () => ({
+      x: Math.random() * 1920,
+      y: Math.random() * 1080,
+      r: Math.random() * 1.8 + 0.4,
+      speed: Math.random() * 0.45 + 0.15,
+      alpha: Math.random() * 0.7 + 0.3
+    }));
+
+    const gameState = {
+      status: 'lobby', // lobby, playing, paused, transition, gameover
+      studentName: 'Phi Công',
+      lessonKey: '',
+      round: 1,
+      score: 0,
+      lives: 3,
+      timeLeft: 90,
+      bonusTimeAdded: 0,
+      totalWordsTarget: 15,
+      wordsCleared: 0,
+      roundCleared: 0,
+      roundQuota: 5,
+      shotsFired: 0,
+      shotsHit: 0,
+      wordQueue: [],
+      missedWords: [],
+      enemies: [],
+      rewardMeteors: [],
+      lasers: [],
+      particles: [],
+      floatingTexts: [],
+      lastEnemySpawn: 0,
+      lastMeteorSpawn: 0,
+      timerTickAccumulator: 0
+    };
+
+    const playerShip = {
+      x: 400,
+      y: 500,
+      targetX: 400,
+      recoil: 0
+    };
+
+    function selectShip(shipId) {
+      selectedStudentShip = shipId;
+      ['falcon', 'nova', 'phoenix'].forEach(id => {
+        const el = document.getElementById(`ship-${id}`);
+        if (el) el.classList.toggle('active', id === shipId);
+      });
+    }
+
+    function buildLessonWordQueue(lessonKey, totalCount) {
+      const lesson = appLessons[lessonKey];
+      const pool = (lesson && lesson.words && lesson.words.length > 0)
+        ? [...lesson.words]
+        : [{ hanzi: '你好', pinyin: 'nǐhǎo', meaning: 'Xin chào' }];
+      const result = [];
+      while (result.length < totalCount) {
+        const shuffled = [...pool].sort(() => Math.random() - 0.5);
+        result.push(...shuffled);
+      }
+      return result.slice(0, totalCount);
+    }
+
+    function startNewGame() {
+      initAudio();
+      if (bgmEnabled) ensureGameplayBgmLoop();
+      const nameVal = document.getElementById('studentNameInput').value.trim();
+      const lessonKey = document.getElementById('studentLessonSelect').value || Object.keys(appLessons)[0];
+      const speedSel = document.getElementById('studentSpeedSelect');
+      const lesson = appLessons[lessonKey];
+
+      gameState.studentName = nameVal || 'Học Sinh';
+      gameState.lessonKey = lessonKey;
+      const parsedSpeed = speedSel ? parseFloat(speedSel.value) : NaN;
+      gameState.selectedSpeed = !Number.isNaN(parsedSpeed) ? parsedSpeed : (Number(appConfig.meteorSpeed) || 0.85);
+      gameState.round = 1;
+      gameState.score = 0;
+      gameState.lives = 3;
+      gameState.timeLeft = Number(appConfig.gameTime) || 90;
+      gameState.bonusTimeAdded = 0;
+
+      const maxTarget = Number(appConfig.targetWords) || 15;
+      const availableCount = lesson ? lesson.words.length : 10;
+      gameState.totalWordsTarget = Math.max(6, Math.min(maxTarget, Math.max(availableCount, 12)));
+      gameState.wordsCleared = 0;
+      gameState.roundCleared = 0;
+      gameState.roundQuota = Math.ceil(gameState.totalWordsTarget / 3);
+      gameState.shotsFired = 0;
+      gameState.shotsHit = 0;
+      gameState.wordQueue = buildLessonWordQueue(lessonKey, gameState.totalWordsTarget);
+      gameState.missedWords = [];
+      gameState.enemies = [];
+      gameState.rewardMeteors = [];
+      gameState.lasers = [];
+      gameState.particles = [];
+      gameState.floatingTexts = [];
+      gameState.lastEnemySpawn = performance.now() - 1200;
+      gameState.lastMeteorSpawn = performance.now() - 10000; // Spawn first reward meteor within ~6s
+      gameState.timerTickAccumulator = 0;
+      gameState.status = 'playing';
+
+      resizeCanvas();
+      playerShip.x = canvasW / 2;
+      playerShip.targetX = canvasW / 2;
+
+      document.getElementById('lobbyScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('pauseOverlay').classList.add('hidden');
+      document.getElementById('roundBanner').classList.add('hidden');
+      document.getElementById('gameHud').classList.remove('hidden');
+      document.getElementById('gameInputBar').classList.remove('hidden');
+
+      updateHudDisplay();
+      const input = document.getElementById('pinyinInput');
+      input.value = '';
+      setTimeout(() => input.focus(), 80);
+    }
+
+    function quitToLobby() {
+      gameState.status = 'lobby';
+      document.getElementById('gameHud').classList.add('hidden');
+      document.getElementById('gameInputBar').classList.add('hidden');
+      document.getElementById('pauseOverlay').classList.add('hidden');
+      document.getElementById('roundBanner').classList.add('hidden');
+      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('lobbyScreen').classList.remove('hidden');
+    }
+
+    function togglePauseGame() {
+      if (gameState.status === 'playing') {
+        gameState.status = 'paused';
+        document.getElementById('pauseOverlay').classList.remove('hidden');
+        document.getElementById('pauseIcon').className = 'fa-solid fa-play text-xs sm:text-sm';
+      } else if (gameState.status === 'paused') {
+        gameState.status = 'playing';
+        document.getElementById('pauseOverlay').classList.add('hidden');
+        document.getElementById('pauseIcon').className = 'fa-solid fa-pause text-xs sm:text-sm';
+        document.getElementById('pinyinInput').focus();
+      }
+    }
+
+    function updateHudDisplay() {
+      const livesEl = document.getElementById('hudLives');
+      let heartsHtml = '';
+      for (let i = 0; i < 5; i++) {
+        if (i < gameState.lives) {
+          heartsHtml += '<i class="fa-solid fa-heart text-rose-500 text-sm sm:text-base drop-shadow"></i>';
+        } else {
+          heartsHtml += '<i class="fa-regular fa-heart text-slate-600 text-sm sm:text-base"></i>';
+        }
+      }
+      livesEl.innerHTML = heartsHtml;
+
+      document.getElementById('hudRound').textContent = gameState.round;
+      const pct = Math.min(100, Math.round((gameState.roundCleared / Math.max(1, gameState.roundQuota)) * 100));
+      document.getElementById('hudRoundBar').style.width = `${pct}%`;
+
+      const timerEl = document.getElementById('hudTimer');
+      timerEl.textContent = `${Math.max(0, Math.ceil(gameState.timeLeft))}s`;
+      timerEl.className = gameState.timeLeft <= 15
+        ? 'font-mono font-extrabold text-sm sm:text-base text-rose-400 animate-pulse'
+        : 'font-mono font-extrabold text-sm sm:text-base text-white';
+
+      document.getElementById('hudWordsCleared').textContent = gameState.wordsCleared;
+      document.getElementById('hudWordsTotal').textContent = gameState.totalWordsTarget;
+      document.getElementById('hudScore').textContent = gameState.score.toLocaleString();
+    }
+
+    // ==================== SPAWN HANZI ENEMIES & 3 TYPES OF REWARD METEORS ====================
+    function spawnEnemyShip() {
+      const remainingToClear = gameState.totalWordsTarget - gameState.wordsCleared;
+      if (remainingToClear <= 0) return;
+      if (gameState.wordQueue.length === 0) {
+        const refill = buildLessonWordQueue(gameState.lessonKey, Math.max(3, remainingToClear));
+        gameState.wordQueue.push(...refill);
+      }
+      const maxConcurrent = gameState.round === 1 ? 1 : 2;
+      if (gameState.enemies.length >= maxConcurrent) return;
+
+      const wordObj = gameState.wordQueue.shift();
+      const margin = Math.max(75, canvasW * 0.14);
+      let x = margin + Math.random() * (canvasW - margin * 2);
+
+      // Avoid horizontal overlap with existing enemies or meteors
+      for (let attempt = 0; attempt < 8; attempt++) {
+        const candidateX = margin + Math.random() * (canvasW - margin * 2);
+        const tooClose = [...gameState.enemies, ...gameState.rewardMeteors].some(obj => Math.abs(obj.x - candidateX) < 120);
+        if (!tooClose) {
+          x = candidateX;
+          break;
+        }
+      }
+
+      const activeSpeed = Number(gameState.selectedSpeed || appConfig.meteorSpeed) || 0.85;
+      const baseSpeed = (canvasH / 21.0) * activeSpeed;
+      const roundMultiplier = gameState.round === 1 ? 1.0 : (gameState.round === 2 ? 1.15 : 1.3);
+      const armoredChance = gameState.round === 1 ? 0 : (gameState.round === 2 ? 0.25 : 0.45);
+      const maxHp = Math.random() < armoredChance ? 2 : 1;
+
+      // Pick a distinct bonus second word from the lesson pool without depleting gameState.wordQueue
+      let secondWordObj = null;
+      if (maxHp === 2) {
+        const lessonPool = (appLessons[gameState.lessonKey]?.words || []).filter(w => w.hanzi !== wordObj.hanzi);
+        if (lessonPool.length > 0) {
+          secondWordObj = lessonPool[Math.floor(Math.random() * lessonPool.length)];
+        } else {
+          secondWordObj = { hanzi: wordObj.hanzi, pinyin: wordObj.pinyin, meaning: wordObj.meaning || '' };
+        }
+      }
+
+      gameState.enemies.push({
+        x,
+        y: 65,
+        vy: baseSpeed * roundMultiplier,
+        hanzi: wordObj.hanzi,
+        pinyin: wordObj.pinyin,
+        meaning: wordObj.meaning || '',
+        normPinyin: normalizePinyin(wordObj.pinyin),
+        secondWord: secondWordObj,
+        hp: maxHp,
+        maxHp,
+        pendingLasers: 0,
+        hitFlash: 0,
+        wobblePhase: Math.random() * Math.PI * 2
+      });
+    }
+
+    function spawnRewardMeteor() {
+      if (gameState.rewardMeteors.length >= 2) return;
+      const types = [
+        { type: 'score', label: '+300 ĐIỂM', color: '#fbbf24', glow: 'rgba(251, 191, 36, 0.55)', core: '#fef08a' },
+        { type: 'time',  label: '+5 GIÂY',   color: '#22d3ee', glow: 'rgba(34, 211, 238, 0.55)', core: '#cffafe' },
+        { type: 'life',  label: '+1 MẠNG',   color: '#34d399', glow: 'rgba(52, 211, 153, 0.55)', core: '#d1fae5' }
+      ];
+      const chosen = types[Math.floor(Math.random() * types.length)];
+      const margin = 65;
+      let x = margin + Math.random() * (canvasW - margin * 2);
+
+      for (let attempt = 0; attempt < 8; attempt++) {
+        const candidateX = margin + Math.random() * (canvasW - margin * 2);
+        const overlapsHanzi = gameState.enemies.some(e => Math.abs(e.x - candidateX) < 115);
+        if (!overlapsHanzi) {
+          x = candidateX;
+          break;
+        }
+      }
+
+      // Travel across screen in ~9.5 seconds
+      const travelDistance = Math.max(350, canvasH - 140);
+      const vy = travelDistance / 9.5;
+      const vx = (Math.random() - 0.5) * 28;
+
+      gameState.rewardMeteors.push({
+        id: Math.random().toString(36).slice(2),
+        x,
+        y: 62,
+        vx,
+        vy,
+        radius: canvasW < 640 ? 24 : 28,
+        rotation: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 1.6,
+        targeted: false,
+        rewarded: false,
+        ...chosen
+      });
+    }
+
+    // ==================== FIRING LASERS & COLLISIONS ====================
+    function fireLaserAtTarget(targetObj, isRewardMeteor = false) {
+      playerShip.targetX = targetObj.x;
+      playerShip.recoil = 10;
+      playLaserSound();
+
+      const shipColor = selectedStudentShip === 'nova' ? '#fbbf24' : (selectedStudentShip === 'phoenix' ? '#34d399' : '#22d3ee');
+      gameState.lasers.push({
+        x: playerShip.x,
+        y: playerShip.y - 24,
+        targetObj,
+        isRewardMeteor,
+        color: isRewardMeteor ? targetObj.color : shipColor,
+        speed: 980
+      });
+    }
+
+    function tryAutoFireMatchingPinyin() {
+      if (gameState.status !== 'playing') return false;
+      const inputEl = document.getElementById('pinyinInput');
+      const raw = inputEl.value.trim();
+      if (!raw) return false;
+
+      const typedNorm = normalizePinyin(raw);
+      if (!typedNorm) return false;
+
+      // Only target enemies that still have remaining HP after in-flight lasers
+      const matchingEnemies = gameState.enemies
+        .filter(e => e.normPinyin === typedNorm && (e.hp - e.pendingLasers) > 0)
+        .sort((a, b) => b.y - a.y);
+
+      if (matchingEnemies.length > 0) {
+        const target = matchingEnemies[0];
+        target.pendingLasers++;
+        gameState.shotsFired++;
+        gameState.shotsHit++;
+        inputEl.value = '';
+        fireLaserAtTarget(target, false);
+        if (document.activeElement !== inputEl) inputEl.focus();
+        return true;
+      }
+      return false;
+    }
+
+    function submitPinyinShot() {
+      if (gameState.status !== 'playing') return;
+      const inputEl = document.getElementById('pinyinInput');
+      const raw = inputEl.value.trim();
+      if (!raw) {
+        inputEl.focus();
+        return;
+      }
+
+      if (!tryAutoFireMatchingPinyin()) {
+        gameState.shotsFired++;
+        // Wrong Pinyin: do not fire and do not clear input so student can edit directly
+        inputEl.classList.add('border-rose-500');
+        setTimeout(() => inputEl.classList.remove('border-rose-500'), 280);
+      }
+      inputEl.focus();
+    }
+
+    function fireAtRewardMeteor() {
+      if (gameState.status !== 'playing') return;
+      const inputEl = document.getElementById('pinyinInput');
+      // Find lowest valid unrewarded and untargeted meteor on screen
+      const activeMeteors = gameState.rewardMeteors
+        .filter(m => !m.rewarded && !m.targeted && m.y >= 20 && m.y <= canvasH - 60)
+        .sort((a, b) => b.y - a.y);
+
+      if (activeMeteors.length === 0) {
+        // No valid meteor on screen: key 1 / button does nothing
+        if (inputEl && document.activeElement !== inputEl) inputEl.focus();
+        return;
+      }
+
+      const targetMeteor = activeMeteors[0];
+      targetMeteor.targeted = true;
+      fireLaserAtTarget(targetMeteor, true);
+      if (inputEl && document.activeElement !== inputEl) inputEl.focus();
+    }
+
+    // Touch or click directly on a reward meteor on canvas
+    document.getElementById('gameCanvas').addEventListener('pointerdown', (e) => {
+      if (gameState.status !== 'playing') return;
+      const rect = canvas.getBoundingClientRect();
+      const px = e.clientX - rect.left;
+      const py = e.clientY - rect.top;
+
+      for (const m of gameState.rewardMeteors) {
+        if (!m.rewarded && !m.targeted && Math.hypot(px - m.x, py - m.y) <= m.radius + 24) {
+          m.targeted = true;
+          fireLaserAtTarget(m, true);
+          document.getElementById('pinyinInput').focus();
+          return;
+        }
+      }
+      document.getElementById('pinyinInput').focus();
+    });
+
+    const pinyinInputEl = document.getElementById('pinyinInput');
+    pinyinInputEl.addEventListener('input', () => {
+      tryAutoFireMatchingPinyin();
+    });
+
+    pinyinInputEl.addEventListener('keydown', (e) => {
+      if (e.key === '1') {
+        const currentVal = pinyinInputEl.value.trim();
+        // If input is empty OR does not end with a letter expecting tone number 1 (e.g. 'ma' -> 'ma1'),
+        // trigger meteor laser without inserting '1' into the Pinyin input box
+        const expectingToneNumber = /[a-zA-ZüÜ]$/.test(currentVal);
+        if (!expectingToneNumber) {
+          e.preventDefault();
+          fireAtRewardMeteor();
+          return;
+        }
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitPinyinShot();
+      }
+    });
+
+    // Global key '1' listener when input is not focused
+    window.addEventListener('keydown', (e) => {
+      if (gameState.status !== 'playing') return;
+      if (e.key === '1' && document.activeElement !== pinyinInputEl) {
+        e.preventDefault();
+        fireAtRewardMeteor();
+        pinyinInputEl.focus();
+      }
+    });
+
+    function createExplosion(x, y, color, count = 22) {
+      for (let i = 0; i < count; i++) {
+        const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
+        const speed = Math.random() * 190 + 50;
+        gameState.particles.push({
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 1,
+          decay: Math.random() * 1.4 + 1.1,
+          size: Math.random() * 4 + 2,
+          color
+        });
+      }
+    }
+
+    function addFloatingText(x, y, text, color) {
+      gameState.floatingTexts.push({
+        x,
+        y,
+        text,
+        color,
+        life: 1.5
+      });
+    }
+
+    function applyRewardMeteorHit(meteor) {
+      if (meteor.rewarded) return;
+      meteor.rewarded = true;
+      playExplosionSound(true);
+      createExplosion(meteor.x, meteor.y, meteor.color, 26);
+
+      if (meteor.type === 'score') {
+        gameState.score += 300;
+        addFloatingText(meteor.x, meteor.y, '+300 ĐIỂM!', '#fbbf24');
+      } else if (meteor.type === 'time') {
+        const remainingCap = Math.max(0, 20 - gameState.bonusTimeAdded);
+        const addSec = Math.min(5, remainingCap);
+        if (addSec > 0) {
+          gameState.timeLeft += addSec;
+          gameState.bonusTimeAdded += addSec;
+          addFloatingText(meteor.x, meteor.y, `+${addSec} GIÂY!`, '#22d3ee');
+        } else {
+          gameState.score += 150;
+          addFloatingText(meteor.x, meteor.y, 'TỐI ĐA THỜI GIAN (+150Đ)', '#22d3ee');
+        }
+      } else if (meteor.type === 'life') {
+        if (gameState.lives < 5) {
+          gameState.lives++;
+          addFloatingText(meteor.x, meteor.y, '+1 MẠNG ❤️', '#34d399');
+        } else {
+          gameState.score += 200;
+          addFloatingText(meteor.x, meteor.y, 'ĐẦY MẠNG (+200Đ)', '#34d399');
+        }
+      }
+
+      gameState.rewardMeteors = gameState.rewardMeteors.filter(m => m.id !== meteor.id);
+      updateHudDisplay();
+    }
+
+    function applyEnemyHit(enemy) {
+      enemy.pendingLasers = Math.max(0, (enemy.pendingLasers || 1) - 1);
+      enemy.hp--;
+      enemy.hitFlash = 0.25;
+      if (enemy.hp > 0) {
+        playLaserSound();
+        createExplosion(enemy.x, enemy.y, '#fbbf24', 14);
+        if (enemy.secondWord) {
+          enemy.hanzi = enemy.secondWord.hanzi;
+          enemy.pinyin = enemy.secondWord.pinyin;
+          enemy.meaning = enemy.secondWord.meaning || '';
+          enemy.normPinyin = normalizePinyin(enemy.secondWord.pinyin);
+          enemy.secondWord = null;
+          addFloatingText(enemy.x, enemy.y - 28, 'VỠ GIÁP! TỪ MỚI XUẤT HIỆN!', '#fbbf24');
+        } else {
+          addFloatingText(enemy.x, enemy.y - 25, 'VỠ GIÁP! BẮN LẠI!', '#38bdf8');
+        }
+        return;
+      }
+
+      playExplosionSound(false);
+      createExplosion(enemy.x, enemy.y, '#22d3ee', 24);
+      const roundBonus = gameState.round === 1 ? 100 : (gameState.round === 2 ? 150 : 200);
+      gameState.score += roundBonus;
+      gameState.wordsCleared++;
+      gameState.roundCleared++;
+      addFloatingText(enemy.x, enemy.y, `+${roundBonus} (${enemy.pinyin})`, '#34d399');
+
+      gameState.enemies = gameState.enemies.filter(e => e !== enemy);
+      updateHudDisplay();
+      checkRoundOrVictoryProgress();
+    }
+
+    function checkRoundOrVictoryProgress() {
+      if (gameState.wordsCleared >= gameState.totalWordsTarget && gameState.enemies.length === 0) {
+        finishGame(true);
+        return;
+      }
+
+      if (gameState.round < 3 && gameState.roundCleared >= gameState.roundQuota && gameState.enemies.length === 0) {
+        const completedRound = gameState.round;
+        const roundClearBonus = completedRound === 1 ? 200 : 400;
+        gameState.score += roundClearBonus;
+        gameState.round++;
+        gameState.roundCleared = 0;
+        gameState.status = 'transition';
+
+        document.getElementById('bannerTitle').textContent = `HOÀN THÀNH VÒNG ${completedRound}!`;
+        document.getElementById('bannerSubtitle').textContent = `Thưởng qua vòng: +${roundClearBonus} điểm`;
+        document.getElementById('bannerNextInfo').textContent = gameState.round === 2
+          ? 'Vòng 2 — Tốc độ tăng 15% & xuất hiện thiên thạch giáp 2 lớp!'
+          : 'Vòng 3 — Đại chiến Boss! Tốc độ tăng 30% & điểm thưởng nhân đôi!';
+        document.getElementById('roundBanner').classList.remove('hidden');
+        updateHudDisplay();
+
+        setTimeout(() => {
+          if (gameState.status === 'transition') {
+            document.getElementById('roundBanner').classList.add('hidden');
+            gameState.status = 'playing';
+            const inp = document.getElementById('pinyinInput');
+            if (inp) inp.focus();
+          }
+        }, 2100);
+      }
+    }
+
+    function finishGame(isVictory) {
+      gameState.status = 'gameover';
+      document.getElementById('gameHud').classList.add('hidden');
+      document.getElementById('gameInputBar').classList.add('hidden');
+      document.getElementById('roundBanner').classList.add('hidden');
+
+      const accuracy = gameState.shotsFired > 0
+        ? Math.min(100, Math.round((gameState.shotsHit / gameState.shotsFired) * 100))
+        : 100;
+      const lessonName = appLessons[gameState.lessonKey]?.name || 'Bài học';
+
+      document.getElementById('resultTitle').textContent = isVictory ? 'HOÀN THÀNH XUẤT SẮC!' : 'HẾT GIỜ / HẾT MẠNG!';
+      document.getElementById('resultBadgeIcon').innerHTML = isVictory
+        ? '<i class="fa-solid fa-crown"></i>'
+        : '<i class="fa-solid fa-meteor text-rose-400"></i>';
+      document.getElementById('resultStudentMeta').textContent = `Phi công: ${gameState.studentName} • ${lessonName}`;
+      document.getElementById('resScore').textContent = gameState.score.toLocaleString();
+      document.getElementById('resWords').textContent = `${gameState.wordsCleared}/${gameState.totalWordsTarget}`;
+      document.getElementById('resAccuracy').textContent = `${accuracy}%`;
+
+      const missedBox = document.getElementById('resMissedWordsBox');
+      const missedList = document.getElementById('resMissedWordsList');
+      if (gameState.missedWords.length > 0) {
+        missedBox.classList.remove('hidden');
+        missedList.innerHTML = gameState.missedWords.map(w =>
+          `<span class="px-2 py-0.5 rounded-lg bg-slate-900 border border-rose-500/30"><b class="hanzi-font text-amber-300">${w.hanzi}</b> (${w.pinyin})</span>`
+        ).join('\n');
+      } else {
+        missedBox.classList.add('hidden');
+      }
+
+      // Record student score
+      appScores.unshift({
+        id: Date.now().toString(36),
+        studentName: gameState.studentName,
+        lessonName,
+        score: gameState.score,
+        words: `${gameState.wordsCleared}/${gameState.totalWordsTarget}`,
+        accuracy: `${accuracy}%`,
+        date: new Date().toLocaleString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })
+      });
+      if (appScores.length > 100) appScores.pop();
+      savePersistentState();
+
+      document.getElementById('resultScreen').classList.remove('hidden');
+    }
+
+    // ==================== MAIN ANIMATION & RENDER LOOP ====================
+    let lastFrameTime = performance.now();
+
+    function drawPlayerShip(x, y) {
+      ctx.save();
+      ctx.translate(x, y + playerShip.recoil);
+
+      // Engine flame
+      const flameLen = 18 + Math.random() * 10;
+      const gradFlame = ctx.createLinearGradient(0, 14, 0, 14 + flameLen);
+      gradFlame.addColorStop(0, '#38bdf8');
+      gradFlame.addColorStop(0.5, '#f59e0b');
+      gradFlame.addColorStop(1, 'transparent');
+      ctx.fillStyle = gradFlame;
+      ctx.beginPath();
+      ctx.moveTo(-9, 14);
+      ctx.lineTo(0, 14 + flameLen);
+      ctx.lineTo(9, 14);
+      ctx.closePath();
+      ctx.fill();
+
+      // Ship hull color by selection
+      const primary = selectedStudentShip === 'nova' ? '#f59e0b' : (selectedStudentShip === 'phoenix' ? '#10b981' : '#06b6d4');
+      const secondary = selectedStudentShip === 'nova' ? '#fef08a' : (selectedStudentShip === 'phoenix' ? '#a7f3d0' : '#bae6fd');
+
+      // Wings
+      ctx.fillStyle = primary;
+      ctx.beginPath();
+      ctx.moveTo(0, -28);
+      ctx.lineTo(28, 16);
+      ctx.lineTo(10, 12);
+      ctx.lineTo(0, 18);
+      ctx.lineTo(-10, 12);
+      ctx.lineTo(-28, 16);
+      ctx.closePath();
+      ctx.fill();
+
+      // Cockpit
+      ctx.fillStyle = secondary;
+      ctx.beginPath();
+      ctx.ellipse(0, -4, 6, 13, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawEnemyShip(e) {
+      ctx.save();
+      const wobbleX = Math.sin(e.wobblePhase) * 6;
+      ctx.translate(e.x + wobbleX, e.y);
+
+      const boxW = canvasW < 640 ? 96 : 116;
+      const boxH = canvasW < 640 ? 56 : 64;
+
+      // Glow aura
+      ctx.shadowColor = e.maxHp > 1 ? '#f59e0b' : '#22d3ee';
+      ctx.shadowBlur = e.hitFlash > 0 ? 25 : 12;
+
+      // UFO / Cosmic Pod body
+      ctx.fillStyle = e.hitFlash > 0 ? '#ffffff' : 'rgba(15, 23, 42, 0.92)';
+      ctx.strokeStyle = e.maxHp > 1 && e.hp === 2 ? '#fbbf24' : '#38bdf8';
+      ctx.lineWidth = e.maxHp > 1 ? 3 : 2;
+
+      ctx.beginPath();
+      ctx.roundRect(-boxW / 2, -boxH / 2, boxW, boxH, 16);
+      ctx.fill();
+      ctx.stroke();
+
+      // Armor badge if 2 HP
+      if (e.maxHp > 1) {
+        ctx.fillStyle = e.hp === 2 ? '#fbbf24' : '#38bdf8';
+        ctx.font = 'bold 10px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(e.hp === 2 ? 'GIÁP x2' : 'GIÁP x1', 0, -boxH / 2 - 5);
+      }
+
+      // Hanzi Character
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `900 ${canvasW < 640 ? 24 : 28}px "Noto Sans SC", sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(e.hanzi, 0, 1);
+
+      ctx.restore();
+    }
+
+    function drawRewardMeteor(m) {
+      ctx.save();
+      ctx.translate(m.x, m.y);
+
+      // Cosmic dust tail trailing upward
+      const tailGrad = ctx.createLinearGradient(0, 0, -m.vx * 1.2, -55);
+      tailGrad.addColorStop(0, m.glow);
+      tailGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = tailGrad;
+      ctx.beginPath();
+      ctx.moveTo(-m.radius * 0.75, 0);
+      ctx.lineTo(-m.vx * 1.1, -58);
+      ctx.lineTo(m.radius * 0.75, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      // Outer energy ring
+      ctx.save();
+      ctx.rotate(m.rotation);
+      ctx.shadowColor = m.color;
+      ctx.shadowBlur = 18;
+      ctx.fillStyle = '#1e293b';
+      ctx.strokeStyle = m.color;
+      ctx.lineWidth = 3;
+
+      // Faceted asteroid polygon
+      ctx.beginPath();
+      const sides = 8;
+      for (let i = 0; i < sides; i++) {
+        const ang = (Math.PI * 2 * i) / sides;
+        const r = m.radius * (i % 2 === 0 ? 1 : 0.84);
+        const px = Math.cos(ang) * r;
+        const py = Math.sin(ang) * r;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Inner glowing crystal core
+      ctx.fillStyle = m.core;
+      ctx.beginPath();
+      ctx.arc(0, 0, m.radius * 0.42, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Clear Reward Label pill below meteor
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = 'rgba(2, 6, 23, 0.85)';
+      ctx.beginPath();
+      ctx.roundRect(-36, m.radius + 4, 72, 16, 8);
+      ctx.fill();
+      ctx.fillStyle = m.color;
+      ctx.font = '800 10px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(m.label, 0, m.radius + 12);
+
+      ctx.restore();
+    }
+
+    function gameLoop(now) {
+      const dt = Math.min((now - lastFrameTime) / 1000, 0.05);
+      lastFrameTime = now;
+
+      ctx.clearRect(0, 0, canvasW, canvasH);
+
+      // Animate background stars
+      for (const s of stars) {
+        s.y += s.speed * (gameState.status === 'playing' ? 1.8 : 0.6);
+        if (s.y > canvasH) {
+          s.y = 0;
+          s.x = Math.random() * canvasW;
+        }
+        ctx.fillStyle = `rgba(226, 232, 240, ${s.alpha})`;
+        ctx.beginPath();
+        ctx.arc(s.x % canvasW, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      if (gameState.status === 'playing') {
+        // Countdown timer
+        gameState.timerTickAccumulator += dt;
+        if (gameState.timerTickAccumulator >= 0.25) {
+          gameState.timeLeft -= gameState.timerTickAccumulator;
+          gameState.timerTickAccumulator = 0;
+          updateHudDisplay();
+          if (gameState.timeLeft <= 0) {
+            finishGame(false);
+          }
+        }
+
+        // Spawn Hanzi Enemies
+        const spawnInterval = gameState.round === 1 ? 2400 : (gameState.round === 2 ? 1900 : 1500);
+        if (now - gameState.lastEnemySpawn > spawnInterval || gameState.enemies.length === 0) {
+          spawnEnemyShip();
+          gameState.lastEnemySpawn = now;
+        }
+
+        // Spawn Reward Meteors (every ~16 seconds across all rounds)
+        if (now - gameState.lastMeteorSpawn > 16000) {
+          spawnRewardMeteor();
+          gameState.lastMeteorSpawn = now;
+        }
+
+        // Smooth ship movement
+        playerShip.x += (playerShip.targetX - playerShip.x) * Math.min(1, dt * 10);
+        playerShip.recoil = Math.max(0, playerShip.recoil - dt * 40);
+
+        // Update Hanzi Enemies
+        const dangerLineY = playerShip.y - 38;
+        for (let i = gameState.enemies.length - 1; i >= 0; i--) {
+          const e = gameState.enemies[i];
+          e.y += e.vy * dt;
+          e.wobblePhase += dt * 2.4;
+          if (e.hitFlash > 0) e.hitFlash -= dt;
+
+          if (e.y >= dangerLineY) {
+            // Missed word
+            playExplosionSound(false);
+            createExplosion(e.x, e.y, '#f43f5e', 20);
+            addFloatingText(e.x, e.y - 20, `Bỏ lỡ: ${e.hanzi} (${e.pinyin})`, '#fb7185');
+            if (!gameState.missedWords.some(m => m.hanzi === e.hanzi)) {
+              gameState.missedWords.push({ hanzi: e.hanzi, pinyin: e.pinyin });
+            }
+            gameState.enemies.splice(i, 1);
+            gameState.lives--;
+            updateHudDisplay();
+            if (gameState.lives <= 0) {
+              finishGame(false);
+              break;
+            } else {
+              // Re-queue missed word so student can still reach target if lives remain
+              gameState.wordQueue.push({ hanzi: e.hanzi, pinyin: e.pinyin, meaning: e.meaning });
+            }
+          }
+        }
+
+        // Update Reward Meteors
+        for (let i = gameState.rewardMeteors.length - 1; i >= 0; i--) {
+          const m = gameState.rewardMeteors[i];
+          m.x += m.vx * dt;
+          m.y += m.vy * dt;
+          m.rotation += m.rotSpeed * dt;
+          if (m.x < 45 || m.x > canvasW - 45) m.vx *= -1;
+          if (m.y > canvasH - 70) {
+            gameState.rewardMeteors.splice(i, 1);
+          }
+        }
+
+        // Update Lasers
+        for (let i = gameState.lasers.length - 1; i >= 0; i--) {
+          const l = gameState.lasers[i];
+          if (!l.targetObj || (l.isRewardMeteor && !gameState.rewardMeteors.includes(l.targetObj))) {
+            gameState.lasers.splice(i, 1);
+            continue;
+          }
+          const tx = l.targetObj.x;
+          const ty = l.targetObj.y;
+          const dx = tx - l.x;
+          const dy = ty - l.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < 24) {
+            if (l.isRewardMeteor) {
+              applyRewardMeteorHit(l.targetObj);
+            } else {
+              applyEnemyHit(l.targetObj);
+            }
+            gameState.lasers.splice(i, 1);
+          } else {
+            l.x += (dx / dist) * l.speed * dt;
+            l.y += (dy / dist) * l.speed * dt;
+          }
+        }
+      }
+
+      // Draw entities when in game / paused / transition
+      if (gameState.status !== 'lobby') {
+        for (const m of gameState.rewardMeteors) drawRewardMeteor(m);
+        for (const e of gameState.enemies) drawEnemyShip(e);
+
+        // Draw Lasers
+        for (const l of gameState.lasers) {
+          ctx.save();
+          ctx.strokeStyle = l.color;
+          ctx.shadowColor = l.color;
+          ctx.shadowBlur = 14;
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.moveTo(l.x, l.y);
+          ctx.lineTo(l.x, l.y + 18);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        drawPlayerShip(playerShip.x, playerShip.y);
+      }
+
+      // Update & Draw Particles
+      for (let i = gameState.particles.length - 1; i >= 0; i--) {
+        const p = gameState.particles[i];
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.life -= p.decay * dt;
+        if (p.life <= 0) {
+          gameState.particles.splice(i, 1);
+          continue;
+        }
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // Update & Draw Floating Texts
+      for (let i = gameState.floatingTexts.length - 1; i >= 0; i--) {
+        const ft = gameState.floatingTexts[i];
+        ft.y -= 38 * dt;
+        ft.life -= dt;
+        if (ft.life <= 0) {
+          gameState.floatingTexts.splice(i, 1);
+          continue;
+        }
+        ctx.save();
+        ctx.globalAlpha = Math.min(1, ft.life);
+        ctx.fillStyle = ft.color;
+        ctx.font = '800 14px "Plus Jakarta Sans", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(ft.text, ft.x, ft.y);
+        ctx.restore();
+      }
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    // ==================== TEACHER AUTHENTICATION & DASHBOARD ====================
+    let secretTapCount = 0;
+    let secretTapTimer = null;
+    document.getElementById('brandSecretTrigger').addEventListener('click', () => {
+      secretTapCount++;
+      clearTimeout(secretTapTimer);
+      secretTapTimer = setTimeout(() => { secretTapCount = 0; }, 1800);
+      if (secretTapCount >= 5) {
+        secretTapCount = 0;
+        handleTeacherAccessClick();
+      }
+    });
+
+    function handleTeacherAccessClick() {
+      if (isTeacherUnlocked) {
+        openTeacherDashboard();
+      } else {
+        document.getElementById('teacherPinError').classList.add('hidden');
+        const pinInput = document.getElementById('teacherPinInput');
+        pinInput.value = '';
+        document.getElementById('modalTeacherAuth').classList.remove('hidden');
+        setTimeout(() => pinInput.focus(), 60);
+      }
+    }
+
+    function closeTeacherAuthModal() {
+      document.getElementById('modalTeacherAuth').classList.add('hidden');
+    }
+
+    function verifyTeacherPin() {
+      const entered = document.getElementById('teacherPinInput').value.trim();
+      const validPin = String(appConfig.teacherPin || '0885');
+      if (entered === validPin) {
+        isTeacherUnlocked = true;
+        closeTeacherAuthModal();
+        openTeacherDashboard();
+      } else {
+        document.getElementById('teacherPinError').classList.remove('hidden');
+      }
+    }
+
+    function lockTeacherSession() {
+      isTeacherUnlocked = false;
+      closeTeacherDashboard();
+    }
+
+    function openTeacherDashboard() {
+      populateLessonDropdowns();
+      renderTeacherVocabTable();
+      renderScoresTable();
+      loadConfigToInputs();
+      document.getElementById('modalTeacherDashboard').classList.remove('hidden');
+    }
+
+    function closeTeacherDashboard() {
+      isTeacherUnlocked = false;
+      document.getElementById('modalTeacherDashboard').classList.add('hidden');
+    }
+
+    function switchTeacherTab(tabName) {
+      ['vocab', 'scores', 'settings'].forEach(t => {
+        document.getElementById(`tabContent-${t}`).classList.toggle('hidden', t !== tabName);
+        const btn = document.getElementById(`tabBtn-${t}`);
+        if (t === tabName) {
+          btn.classList.add('border-amber-400', 'text-amber-300');
+          btn.classList.remove('border-transparent', 'text-slate-400');
+        } else {
+          btn.classList.remove('border-amber-400', 'text-amber-300');
+          btn.classList.add('border-transparent', 'text-slate-400');
+        }
+      });
+      if (tabName === 'scores') renderScoresTable();
+    }
+
+    function populateLessonDropdowns() {
+      const studentSelect = document.getElementById('studentLessonSelect');
+      const teacherSelect = document.getElementById('teacherLessonSelect');
+      const prevStudentVal = studentSelect.value;
+
+      const keys = Object.keys(appLessons);
+      if (!appLessons[currentActiveTeacherLessonKey] && keys.length > 0) {
+        currentActiveTeacherLessonKey = keys[0];
+      }
+
+      const optionsHtml = keys.map(k => {
+        const l = appLessons[k];
+        return `<option value="${k}">${l.name} (${l.words.length} từ)</option>`;
+      }).join('\n');
+
+      studentSelect.innerHTML = optionsHtml;
+      teacherSelect.innerHTML = optionsHtml;
+
+      if (prevStudentVal && appLessons[prevStudentVal]) {
+        studentSelect.value = prevStudentVal;
+      } else if (currentActiveTeacherLessonKey) {
+        studentSelect.value = currentActiveTeacherLessonKey;
+      }
+      teacherSelect.value = currentActiveTeacherLessonKey;
+    }
+
+    function onTeacherLessonChange() {
+      currentActiveTeacherLessonKey = document.getElementById('teacherLessonSelect').value;
+      cancelEditSingleWord();
+      savePersistentState();
+      renderTeacherVocabTable();
+    }
+
+    function promptCreateNewLesson() {
+      document.getElementById('newLessonBox').classList.remove('hidden');
+      const inp = document.getElementById('newLessonNameInput');
+      inp.value = '';
+      inp.focus();
+    }
+
+    function confirmCreateNewLesson() {
+      const name = document.getElementById('newLessonNameInput').value.trim();
+      if (!name) return;
+      const newKey = 'bai_' + Date.now().toString(36);
+      appLessons[newKey] = {
+        name,
+        words: [{ hanzi: '你好', pinyin: 'nǐhǎo', meaning: 'Xin chào' }]
+      };
+      currentActiveTeacherLessonKey = newKey;
+      document.getElementById('newLessonBox').classList.add('hidden');
+      savePersistentState();
+      renderTeacherVocabTable();
+    }
+
+    function importBulkVocab() {
+      const textarea = document.getElementById('bulkVocabTextarea');
+      const lines = textarea.value.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      if (lines.length === 0) return;
+
+      const parsedWords = [];
+      for (const line of lines) {
+        // Split between Hanzi and Pinyin by first whitespace
+        const match = line.match(/^([^\s]+)\s+(.+)$/);
+        if (match) {
+          const hanzi = match[1].trim();
+          const rest = match[2].trim();
+          // Optional meaning separated by tab or " - " or "|"
+          const parts = rest.split(/\t|\s-\s|\|/);
+          const pinyin = parts[0].trim();
+          const meaning = parts[1] ? parts[1].trim() : '';
+          parsedWords.push({ hanzi, pinyin, meaning });
+        }
+      }
+
+      if (parsedWords.length === 0) return;
+
+      const lesson = appLessons[currentActiveTeacherLessonKey];
+      const shouldReplace = document.getElementById('bulkReplaceCheckbox').checked;
+      if (shouldReplace) {
+        lesson.words = parsedWords;
+      } else {
+        lesson.words.push(...parsedWords);
+      }
+
+      textarea.value = '';
+      savePersistentState();
+      renderTeacherVocabTable();
+    }
+
+    function renderTeacherVocabTable() {
+      const lesson = appLessons[currentActiveTeacherLessonKey];
+      const tbody = document.getElementById('vocabTableBody');
+      const badge = document.getElementById('vocabCountBadge');
+      if (!lesson) return;
+
+      badge.textContent = lesson.words.length;
+      tbody.innerHTML = lesson.words.map((w, idx) => `
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400">${idx + 1}</td>
+          <td class="py-2 px-3 hanzi-font text-base font-black text-white">${w.hanzi}</td>
+          <td class="py-2 px-3 font-bold text-cyan-300">${w.pinyin}</td>
+          <td class="py-2 px-3 text-slate-300">${w.meaning || '—'}</td>
+          <td class="py-2 px-3 text-right space-x-1">
+            <button onclick="editSingleWord(${idx})" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-cyan-300" title="Sửa từ">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button onclick="deleteSingleWord(${idx})" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-rose-400" title="Xóa từ">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('\n');
+    }
+
+    function editSingleWord(idx) {
+      const lesson = appLessons[currentActiveTeacherLessonKey];
+      const w = lesson.words[idx];
+      if (!w) return;
+      editingWordIndex = idx;
+      document.getElementById('singleWordFormTitle').innerHTML = `<i class="fa-solid fa-pen mr-1"></i> Đang Sửa Từ #${idx + 1}`;
+      document.getElementById('singleHanziInput').value = w.hanzi;
+      document.getElementById('singlePinyinInput').value = w.pinyin;
+      document.getElementById('singleMeaningInput').value = w.meaning || '';
+      document.getElementById('btnCancelEditWord').classList.remove('hidden');
+    }
+
+    function cancelEditSingleWord() {
+      editingWordIndex = -1;
+      document.getElementById('singleWordFormTitle').innerHTML = `<i class="fa-solid fa-plus-circle mr-1"></i> Thêm / Sửa Từng Từ Vựng`;
+      document.getElementById('singleHanziInput').value = '';
+      document.getElementById('singlePinyinInput').value = '';
+      document.getElementById('singleMeaningInput').value = '';
+      document.getElementById('btnCancelEditWord').classList.add('hidden');
+    }
+
+    function saveSingleWord() {
+      const hanzi = document.getElementById('singleHanziInput').value.trim();
+      const pinyin = document.getElementById('singlePinyinInput').value.trim();
+      const meaning = document.getElementById('singleMeaningInput').value.trim();
+      if (!hanzi || !pinyin) return;
+
+      const lesson = appLessons[currentActiveTeacherLessonKey];
+      if (editingWordIndex >= 0) {
+        lesson.words[editingWordIndex] = { hanzi, pinyin, meaning };
+      } else {
+        lesson.words.push({ hanzi, pinyin, meaning });
+      }
+      cancelEditSingleWord();
+      savePersistentState();
+      renderTeacherVocabTable();
+    }
+
+    function deleteSingleWord(idx) {
+      const lesson = appLessons[currentActiveTeacherLessonKey];
+      if (lesson.words.length <= 1) return;
+      lesson.words.splice(idx, 1);
+      savePersistentState();
+      renderTeacherVocabTable();
+    }
+
+    // ==================== MANAGE & DELETE OLD LESSONS ====================
+    function openManageLessonsModal() {
+      const listEl = document.getElementById('manageLessonsList');
+      const keys = Object.keys(appLessons);
+      listEl.innerHTML = keys.map(k => {
+        const l = appLessons[k];
+        return `
+          <div class="flex items-center justify-between bg-slate-900 border border-slate-800 rounded-xl px-3 py-2">
+            <label class="flex items-center gap-2 text-xs font-bold text-slate-200 cursor-pointer">
+              <input type="checkbox" value="${k}" class="lesson-del-checkbox rounded accent-rose-500" />
+              <span>${l.name} <span class="text-slate-400 font-normal">(${l.words.length} từ)</span></span>
+            </label>
+            <button onclick="deleteSingleLessonByKey('${k}')" class="px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 text-[11px] font-bold">
+              Xóa
+            </button>
+          </div>
+        `;
+      }).join('\n');
+      document.getElementById('modalManageLessons').classList.remove('hidden');
+    }
+
+    function deleteSingleLessonByKey(key) {
+      const keys = Object.keys(appLessons);
+      if (keys.length <= 1) return;
+      delete appLessons[key];
+      currentActiveTeacherLessonKey = Object.keys(appLessons)[0];
+      savePersistentState();
+      renderTeacherVocabTable();
+      openManageLessonsModal();
+    }
+
+    function deleteSelectedLessons() {
+      const checked = Array.from(document.querySelectorAll('.lesson-del-checkbox:checked')).map(cb => cb.value);
+      if (checked.length === 0) return;
+      for (const k of checked) {
+        if (Object.keys(appLessons).length > 1) {
+          delete appLessons[k];
+        }
+      }
+      currentActiveTeacherLessonKey = Object.keys(appLessons)[0];
+      savePersistentState();
+      renderTeacherVocabTable();
+      openManageLessonsModal();
+    }
+
+    // ==================== SCORES & CONFIG ====================
+    function renderScoresTable() {
+      const tbody = document.getElementById('tableScoresBody');
+      if (!tbody) return;
+      if (appScores.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-slate-500">Chưa có lượt chơi nào được ghi nhận</td></tr>';
+        return;
+      }
+      tbody.innerHTML = appScores.map(s => `
+        <tr class="hover:bg-slate-800/40">
+          <td class="py-2 px-3 font-bold text-white">${s.studentName}</td>
+          <td class="py-2 px-3 text-slate-300">${s.lessonName}</td>
+          <td class="py-2 px-3 font-mono font-black text-amber-400">${s.score}</td>
+          <td class="py-2 px-3 text-emerald-400 font-bold">${s.words}</td>
+          <td class="py-2 px-3 text-cyan-300">${s.accuracy}</td>
+          <td class="py-2 px-3 text-slate-400">${s.date}</td>
+        </tr>
+      `).join('\n');
+    }
+
+    function clearAllScores() {
+      appScores = [];
+      savePersistentState();
+      renderScoresTable();
+    }
+
+    function exportScoresCsv() {
+      const rows = [['Hoc Sinh', 'Bai Hoc', 'Diem', 'Tu Dung', 'Chinh Xac', 'Thoi Gian']];
+      appScores.forEach(s => {
+        rows.push([s.studentName, s.lessonName, s.score, s.words, s.accuracy, s.date]);
+      });
+      const csvContent = 'data:text/csv;charset=utf-8,﻿' + rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+      const link = document.createElement('a');
+      link.setAttribute('href', encodeURI(csvContent));
+      link.setAttribute('download', 'bang-diem-hanzi-cosmic.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function loadConfigToInputs() {
+      document.getElementById('cfgGameTime').value = appConfig.gameTime || 90;
+      document.getElementById('cfgTargetWords').value = appConfig.targetWords || 15;
+      document.getElementById('cfgMeteorSpeed').value = String(appConfig.meteorSpeed || 0.85);
+      document.getElementById('cfgTeacherPin').value = appConfig.teacherPin || '0885';
+      const stSpeed = document.getElementById('studentSpeedSelect');
+      if (stSpeed && appConfig.meteorSpeed) {
+        stSpeed.value = String(appConfig.meteorSpeed);
+      }
+    }
+
+    function saveGameConfig() {
+      appConfig.gameTime = Math.max(30, Number(document.getElementById('cfgGameTime').value) || 90);
+      appConfig.targetWords = Math.max(5, Number(document.getElementById('cfgTargetWords').value) || 15);
+      appConfig.meteorSpeed = Number(document.getElementById('cfgMeteorSpeed').value) || 0.85;
+      const newPin = document.getElementById('cfgTeacherPin').value.trim();
+      if (newPin.length >= 4) {
+        appConfig.teacherPin = newPin;
+      }
+      savePersistentState();
+    }
+
+    // ==================== SHARE QR & DOWNLOAD STANDALONE HTML ====================
+    function openShareStudentLinkModal() {
+      try {
+        const cleanUrl = window.location.href.split('?')[0].split('#')[0];
+        const urlInput = document.getElementById('inputShareableStudentUrl');
+        if (urlInput) urlInput.value = cleanUrl;
+
+        const qrContainer = document.getElementById('qrCodeContainer');
+        if (qrContainer) {
+          qrContainer.innerHTML = '';
+          if (typeof QRCode !== 'undefined') {
+            new QRCode(qrContainer, {
+              text: cleanUrl,
+              width: 154,
+              height: 154,
+              colorDark: '#0f172a',
+              colorLight: '#ffffff',
+              correctLevel: QRCode.CorrectLevel.L
+            });
+          } else {
+            qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=154x154&data=${encodeURIComponent(cleanUrl)}" alt="QR Code" class="w-full h-full object-contain" />`;
+          }
+        }
+        document.getElementById('modalShareLink').classList.remove('hidden');
+      } catch (e) {
+        console.warn('Share modal error:', e);
+      }
+    }
+
+    function copyShareStudentUrl() {
+      const input = document.getElementById('inputShareableStudentUrl');
+      if (!input) return;
+      input.select();
+      navigator.clipboard?.writeText(input.value);
+      const btn = document.getElementById('btnCopyShareUrl');
+      btn.textContent = 'Đã Chép!';
+      setTimeout(() => { btn.textContent = 'Sao Chép'; }, 1800);
+    }
+
+    function downloadStandaloneGameHtml() {
+      // Embed current teacher lessons & config directly into #embedded-lesson-data in the clean HTML source
+      const payload = JSON.stringify({ lessons: appLessons, config: appConfig }, null, 2);
+      const rawHtml = document.documentElement.outerHTML;
+      const markerStart = '<script id="embedded-lesson-data" type="application/json">';
+      const markerEnd = '<\/script>';
+      const startIdx = rawHtml.indexOf(markerStart);
+      const endIdx = startIdx !== -1 ? rawHtml.indexOf(markerEnd, startIdx + markerStart.length) : -1;
+
+      let fullHtml = '';
+      if (startIdx !== -1 && endIdx !== -1) {
+        fullHtml = '<!DOCTYPE html>\n' +
+          rawHtml.slice(0, startIdx + markerStart.length) +
+          '\n' + payload + '\n  ' +
+          rawHtml.slice(endIdx);
+      } else {
+        fullHtml = '<!DOCTYPE html>\n' + rawHtml;
+      }
+
+      const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // ==================== EXPLICIT EVENT BINDINGS & BOOTSTRAP ====================
+    function bindAllUiEvents() {
+      const btnTeacher = document.getElementById('btnOpenTeacher');
+      if (btnTeacher) {
+        btnTeacher.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleTeacherAccessClick();
+        });
+      }
+
+      ['falcon', 'nova', 'phoenix'].forEach((shipId) => {
+        const card = document.getElementById('ship-' + shipId);
+        if (card) {
+          card.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            selectShip(shipId);
+          });
+        }
+      });
+
+      const pinInput = document.getElementById('teacherPinInput');
+      if (pinInput) {
+        pinInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            verifyTeacherPin();
+          }
+        });
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadPersistentState();
+      populateLessonDropdowns();
+      const stSpeedInit = document.getElementById('studentSpeedSelect');
+      if (stSpeedInit && appConfig.meteorSpeed) {
+        stSpeedInit.value = String(appConfig.meteorSpeed);
+      }
+      selectShip(selectedStudentShip);
+      syncBgmButtonUi();
+      bindAllUiEvents();
+      resizeCanvas();
+      requestAnimationFrame(gameLoop);
+
+      // Support ?role=teacher query parameter
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('role') === 'teacher') {
+        handleTeacherAccessClick();
+      }
+    });
+  </script>
+
+
+</body></html>
